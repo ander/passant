@@ -8,8 +8,10 @@ class Castling < Move
   
   def initialize(king, to)
     raise "King required" unless king.is_a?(King)
+    
     row = (king.white? ? 0 : 7)
     raise "Invalid castling" unless [[6,row], [2,row]].include?(to)
+    
     @piece = king
     @from = @piece.position
     @to = to
@@ -30,7 +32,7 @@ class Castling < Move
   end
   
   def to_s
-    @ctype == :long ? "x-x-x" : "x-x"
+    @to[0] == 2 ? 'x-x-x' : 'x-x'
   end
 
 end

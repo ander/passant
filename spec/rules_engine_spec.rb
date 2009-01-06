@@ -119,7 +119,7 @@ describe RulesEngine do
                 'PPPQPPPP',
                 'R...KBNR'  ])
     
-    C = board.rules.castlings(board.king(:white))
+    c = board.rules.castlings(board.king(:white))
     c.size.should == 1
     c.first.to.should == c1
   end
