@@ -11,5 +11,5 @@ Define the chessboard coordinates.
 end
 
 def chess_coords(pos)
-  "abcdefgh"[pos[0]..pos[0]] + pos[1].to_s
+  "abcdefgh"[pos[0]..pos[0]] + (pos[1]+1).to_s
 end
