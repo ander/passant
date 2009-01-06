@@ -32,6 +32,9 @@ class Piece
     color == :white ? 1 : -1
   end
   
+  def white?; color == :white; end
+  def black?; color == :black; end
+
   def enemy_color
     color == :white ? :black : :white
   end

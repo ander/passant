@@ -10,7 +10,7 @@ class King < Piece
         mvs << mv
       end
     end
-    mvs += @board.rules.fortifications(self)
+    mvs += @board.rules.castlings(self)
     mvs
   end
   

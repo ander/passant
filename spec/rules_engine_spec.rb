@@ -105,7 +105,7 @@ describe RulesEngine do
                '........', 
                '........', 
                'K.......'])
-    board.rules.check_mate?(:white).should == true
+    board.rules.checkmate?(:white).should == true
   end
 
 end

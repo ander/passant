@@ -53,9 +53,8 @@ class RulesEngine
     return nil
   end
 
-  def fortifications(king)
+  def castlings(king)
     return [] if king.moved?
-    # ...
     return []
   end
   
@@ -68,7 +67,7 @@ class RulesEngine
     return enemy_moves.include?(king.position)
   end
 
-  def check_mate?(color)
+  def checkmate?(color)
     check?(color) and @board.all_moves(color, true).empty?
   end
 
