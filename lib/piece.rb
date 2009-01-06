@@ -5,6 +5,7 @@ Base class for chess pieces.
 =end
 
 require File.dirname(__FILE__)+"/move"
+require File.dirname(__FILE__)+"/castling"
 
 class Piece
   attr_accessor :position, :history
@@ -56,7 +57,7 @@ class Piece
     mvs
   end
 
-  def captured!
+  def capture!
     @board.remove_piece(self)
   end
 

@@ -55,7 +55,33 @@ class RulesEngine
 
   def castlings(king)
     return [] if king.moved?
-    return []
+    moves = []
+    row = (king.white? ? 0 : 7)
+    
+    if (rook = @board.at([0,row])) and \
+       rook.is_a?(Rook) and \
+       rook.color == king.color and \
+       !rook.moved? and \
+       @board.at([1, row]).nil? and \
+       @board.at([2, row]).nil? and \
+       @board.at([3, row]).nil? and \
+       (@board.all_moves(king.enemy_color).\
+       map{|m| m.to} & [[2,row],[3,row],[4,row]]).empty?
+      moves << Castling.new(king, :long)
+    end
+    
+    if (rook = @board.at([7,row])) and \
+       rook.is_a?(Rook) and \
+       rook.color == king.color and \
+       !rook.moved? and \
+       @board.at([5,row]).nil? and \
+       @board.at([6,row]).nil? and \
+       (@board.all_moves(king.enemy_color).\
+       map{|m| m.to} & [[6,row],[7,row]]).empty?
+      moves << Castling.new(king, :short)
+    end
+    
+    return moves
   end
   
   # is it check for color? (color's turn)

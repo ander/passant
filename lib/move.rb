@@ -19,7 +19,7 @@ class Move
 
   def apply
     if p = @piece.board.at(@to)
-      p.captured!
+      p.capture!
     end
     @piece.position = @to
     @piece.history << self

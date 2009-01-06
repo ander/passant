@@ -108,4 +108,37 @@ describe RulesEngine do
     board.rules.checkmate?(:white).should == true
   end
 
+  it "should allow long castling" do
+    board = Board.new(
+              [ '........',
+                '........',
+                '........',
+                '........',
+                '...P.B..',
+                '..N.....',
+                'PPPQPPPP',
+                'R...KBNR'  ])
+    
+    c = board.rules.castlings(board.king(:white))
+    c.size.should == 1
+    c.first.to.should == c1
+  end
+
+  it "should allow short castling" do
+    board = Board.new(
+              [ '........',
+                '........',
+                '........',
+                '........',
+                '..BPPB..',
+                '.....N..',
+                'PPPQ.PPP',
+                'RN..K..R'  ])
+    
+    c = board.rules.castlings(board.king(:white))
+    c.size.should == 1
+    c.first.to.should == g1
+  end
+  
+
 end
