@@ -16,8 +16,8 @@ describe RulesEngine do
       rook = board.at(a1)
       mv = Move.new(rook, a2)
       board.rules.valid_linear_move?(mv).should == false
-      m2 = Move.new(rook, a3)
-      board.rules.valid_linear_move?(mv).should == false
+      mv2 = Move.new(rook, a3)
+      board.rules.valid_linear_move?(mv2).should == false
     end
     
     it "should exclude moves which jump over enemy pieces" do
@@ -119,7 +119,7 @@ describe RulesEngine do
                 'PPPQPPPP',
                 'R...KBNR'  ])
     
-    c = board.rules.castlings(board.king(:white))
+    C = board.rules.castlings(board.king(:white))
     c.size.should == 1
     c.first.to.should == c1
   end

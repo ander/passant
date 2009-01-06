@@ -6,21 +6,18 @@ Castling.
 
 class Castling < Move
   
-  def initialize(king, ctype)
+  def initialize(king, to)
     raise "King required" unless king.is_a?(King)
-    raise "Invalid castling" unless [:short, :long].include?(ctype)
+    row = (king.white? ? 0 : 7)
+    raise "Invalid castling" unless [[6,row], [2,row]].include?(to)
     @piece = king
     @from = @piece.position
-    @ctype = ctype
+    @to = to
     
-    row = (king.white? ? 0 : 7)
-    
-    if @ctype == :long
-      @to = [2,row]
+    if to == [2,row]  # long
       @rook = @piece.board.at([0,row])
       @rook_to = [3,row]
     else
-      @to = [6,row]
       @rook = @piece.board.at([7,row])
       @rook_to = [5,row]
     end

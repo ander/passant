@@ -104,7 +104,7 @@ class Board
   def after_move(move)
     raise "Invalid piece!" unless @pieces.include?(move.piece)
     new_board = Board.new(self.to_a.reverse)
-    new_move = Move.new(new_board.at(move.from), move.to)
+    new_move = move.class.new(new_board.at(move.from), move.to)
     new_move.apply
     new_board
   end
@@ -112,6 +112,10 @@ class Board
   def letter_for_piece(piece)
     pl = PieceLetterMap.detect{|k,v| piece.class == k}
     piece.color == :white ? pl[1][0] : pl[1][1]
+  end
+  
+  def ==(other)
+    self.to_s == other.to_s
   end
 
   private

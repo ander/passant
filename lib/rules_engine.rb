@@ -67,7 +67,7 @@ class RulesEngine
        @board.at([3, row]).nil? and \
        (@board.all_moves(king.enemy_color).\
        map{|m| m.to} & [[2,row],[3,row],[4,row]]).empty?
-      moves << Castling.new(king, :long)
+      moves << Castling.new(king, [2,row])
     end
     
     if (rook = @board.at([7,row])) and \
@@ -77,8 +77,8 @@ class RulesEngine
        @board.at([5,row]).nil? and \
        @board.at([6,row]).nil? and \
        (@board.all_moves(king.enemy_color).\
-       map{|m| m.to} & [[6,row],[7,row]]).empty?
-      moves << Castling.new(king, :short)
+       map{|m| m.to} & [[5,row],[6,row]]).empty?
+      moves << Castling.new(king, [6,row])
     end
     
     return moves
