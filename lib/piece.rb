@@ -6,6 +6,7 @@ Base class for chess pieces.
 
 require File.dirname(__FILE__)+"/move"
 require File.dirname(__FILE__)+"/castling"
+require File.dirname(__FILE__)+"/en_passant"
 
 class Piece
   attr_accessor :position, :history

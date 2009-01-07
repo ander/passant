@@ -50,9 +50,20 @@ class RulesEngine
   end
 
   def en_passant(pawn)
+    last_mv = @board.history.last
+    if last_mv and \
+       last_mv.piece.is_a?(Pawn) and \
+       pawn.enemy?(last_mv.piece) and \
+       (last_mv.from[1] - last_mv.to[1]).abs == 2 and \
+       (last_mv.piece.position == [pawn.x+1, pawn.y] or \
+        last_mv.piece.position == [pawn.x-1, pawn.y])
+      return EnPassant.new(pawn, 
+                           [last_mv.piece.x, pawn.y + pawn.advance_direction])
+    end
     return nil
   end
 
+  # TODO don't allow castling with a promoted rook
   def castlings(king)
     return [] if king.moved?
     moves = []
