@@ -62,8 +62,7 @@ class RulesEngine
     end
     return nil
   end
-
-  # TODO don't allow castling with a promoted rook
+  
   def castlings(king)
     return [] if king.moved?
     moves = []

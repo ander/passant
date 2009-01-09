@@ -118,6 +118,8 @@ class Board
     self.to_s == other.to_s
   end
 
+  def inspect; "\n"+self.to_s; end
+
   private
   
   def new_piece_by_letter(letter, pos)
