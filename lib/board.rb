@@ -114,6 +114,11 @@ class Board
     piece.color == :white ? pl[1][0] : pl[1][1]
   end
   
+  def letter_for_piece_class_and_color(klass, color)
+    pl = PieceLetterMap.detect{|k,v| klass == k}
+    color == :white ? pl[1][0] : pl[1][1]
+  end
+
   def ==(other)
     self.to_s == other.to_s
   end

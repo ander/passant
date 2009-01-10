@@ -7,6 +7,7 @@ Base class for chess pieces.
 require File.dirname(__FILE__)+"/move"
 require File.dirname(__FILE__)+"/castling"
 require File.dirname(__FILE__)+"/en_passant"
+require File.dirname(__FILE__)+"/promotion"
 
 class Piece
   attr_accessor :position, :history
@@ -42,6 +43,7 @@ class Piece
   end
 
   def enemy?(piece)
+    return false unless piece
     piece.color == enemy_color
   end
 

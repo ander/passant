@@ -1,7 +1,7 @@
 require File.dirname(__FILE__)+"/../lib/board.rb"
 
 describe EnPassant do
-  it "should move pieces correctly, eat left" do
+  it "should move pieces correctly" do
     # black's move
     
     board = Board.new(
@@ -43,7 +43,7 @@ describe EnPassant do
     board.should == expected
   end
 
-  it "should move pieces correctly, eat right" do
+  it "should move pieces correctly, part 2" do
     # black's move
     
     board = Board.new(

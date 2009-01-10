@@ -17,10 +17,12 @@ class EnPassant < Move
     super
     @capture_pawn.capture!
   end
-  
+
+  def capture?; true; end
+
   def to_s
     l = @piece.board.letter_for_piece(@piece)
     "#{l}#{chess_coords(@from)}x#{chess_coords(@to)}"
   end
-
+  
 end
