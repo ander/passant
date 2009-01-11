@@ -30,8 +30,6 @@ class Board
   attr_reader :pieces, :rules, :history
 
   def initialize(position=InitialPosition)
-    @x_max = 7 
-    @y_max = 7
     @rules = RulesEngine.new(self)
     set position
   end
@@ -45,20 +43,18 @@ class Board
   end
   
   def remove_piece(piece)
-    @pieces -= [piece]
+    @pieces.delete(piece)
   end
 
   def off_limits?(position)
-    return true if position[0] > @x_max or position[0] < 0
-    return true if position[1] > @y_max or position[1] < 0
-    return false
+    position[0] > 7 or position[0] < 0 or \
+    position[1] > 7 or position[1] < 0
   end
   
-  def square_content(pos)
+  def at(pos)
     @pieces.detect{|p| p.position == pos}
   end
-  alias_method :at, :square_content
-
+  
   def king(color)
     @pieces.detect{|p| p.class == King and p.color == color}
   end
@@ -69,9 +65,10 @@ class Board
   end
   
   def set(board_data)
-    board_data = board_data.split if board_data.is_a?(String)
     @pieces = []
     @history = []
+    board_data = board_data.split if board_data.is_a?(String)
+    
     board_data.reverse.each_with_index do |row, y|
       x = 0
       row.each_char do |letter|
@@ -125,10 +122,11 @@ class Board
     self
   end
 
+  # N.B. does not take history into account
   def ==(other)
     self.to_s == other.to_s
   end
-
+  
   def inspect; "\n"+self.to_s; end
 
   private
