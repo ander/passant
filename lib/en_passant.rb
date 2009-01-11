@@ -10,14 +10,10 @@ class EnPassant < Move
     @piece = pawn
     @from = @piece.position
     @to = to
-    @capture_pawn = @piece.board.at([@to[0], @to[1] - @piece.advance_direction])
+    @capture_piece = \
+      @piece.board.at([@to[0], @to[1] - @piece.advance_direction])
   end
   
-  def apply
-    super
-    @capture_pawn.capture!
-  end
-
   def capture?; true; end
 
   def to_s

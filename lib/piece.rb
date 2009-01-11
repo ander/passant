@@ -60,8 +60,8 @@ class Piece
     mvs
   end
 
-  def capture!
-    @board.remove_piece(self)
+  def capture; @board.remove_piece(self); end
+  def uncapture
+    @board.add_piece(self) unless @board.pieces.include?(self)
   end
-
 end

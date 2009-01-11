@@ -118,6 +118,12 @@ class Board
     pl = PieceLetterMap.detect{|k,v| klass == k}
     color == :white ? pl[1][0] : pl[1][1]
   end
+  
+  def take_back
+    last_mv = @history.last
+    last_mv.take_back if last_mv
+    self
+  end
 
   def ==(other)
     self.to_s == other.to_s
