@@ -12,10 +12,9 @@ describe Promotion do
                 '........',
                 '........'  ])
 
-    mv = board.at(a7).moves.first
-    mv.should be_kind_of(Promotion)
+    mv = Promotion.new(board.at(a7), a8)
     mv.apply
-
+    
     after_promo  = Board.new(
               [ 'Q.......',
                 '........',
@@ -27,6 +26,38 @@ describe Promotion do
                 '........'  ])
     
     board.should == after_promo
+  end
+
+  describe "#take_back" do
+    it "should undo promotion" do     
+      setting = [ '........',
+                  'P.......',
+                  '........',
+                  '........',
+                  '........',
+                  '........',
+                  '........',
+                  '........'  ]
+      
+      board = Board.new(setting)
+      
+      mv = Promotion.new(board.at(a7), a8)
+      mv.apply
+    
+      after_promo  = Board.new(
+              [ 'Q.......',
+                '........',
+                '........',
+                '........',
+                '........',
+                '........',
+                '........',
+                '........'  ])
+    
+      board.should == after_promo
+      mv.take_back
+      board.should == Board.new(setting)
+    end
   end
 
 end

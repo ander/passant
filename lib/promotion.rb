@@ -18,9 +18,17 @@ class Promotion < Move
                                             @piece.position,
                                             @piece.color))
   end
-
+  
   def capture?; false; end
-
+  
+  def take_back
+    @piece.board.remove_piece(@piece.board.at(@to))
+    @piece.board.add_piece(@piece)
+    @piece.position = @from
+    @piece.history.delete(self)
+    @piece.board.history.delete(self)
+  end
+  
   def to_s
     super + "=" + 
       @piece.board.letter_for_piece_class_and_color(@promo_piece,

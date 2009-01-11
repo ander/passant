@@ -17,10 +17,12 @@ class Castling < Move
     @to = to
     
     if to == [2,row]  # long
-      @rook = @piece.board.at([0,row])
+      @rook_from = [0, row]
+      @rook = @piece.board.at(@rook_from)
       @rook_to = [3,row]
     else
-      @rook = @piece.board.at([7,row])
+      @rook_from = [7, row]
+      @rook = @piece.board.at(@rook_from)
       @rook_to = [5,row]
     end
   end
@@ -29,6 +31,12 @@ class Castling < Move
     super
     @rook.position = @rook_to
     @rook.history << self
+  end
+
+  def take_back
+    super
+    @rook.position = @rook_from
+    @rook.history.delete(self)
   end
   
   def to_s
