@@ -40,7 +40,7 @@ class Castling < Move
   end
   
   def to_s
-    @to[0] == 2 ? 'x-x-x' : 'x-x'
+    @to[0] == 2 ? '0-0-0' : '0-0'
   end
 
 end
