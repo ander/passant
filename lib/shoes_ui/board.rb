@@ -25,10 +25,10 @@ module ShoesUI
       end
     end
 
-    def square_top(x,y); y*square_size end
+    def square_top(x,y); (7-y)*square_size end
     def square_left(x,y); x*square_size end
 
-    def is_white_square?(x,y); (x+y) % 2 == 0 end 
+    def is_white_square?(x,y); (x+y+1) % 2 == 0 end 
     
     private
     
