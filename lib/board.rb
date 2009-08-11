@@ -71,7 +71,8 @@ class Board
     
     board_data.reverse.each_with_index do |row, y|
       x = 0
-      row.each_char do |letter|
+      row.size.times do |i|
+        letter = row[i,1]
         new_piece_by_letter(letter, [x,y]) if letter != '.'
         x += 1
       end
