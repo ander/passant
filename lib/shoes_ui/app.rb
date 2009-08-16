@@ -10,7 +10,7 @@ Shoes.app(:title  => 'Passant',
   background black
   
   stack :margin => 10 do
-    @board = ShoesUI::Board.new(self)
+    @board = ShoesUI::Board.new(self, [10,10])
     @status = para "Welcome to Passant.", :stroke => white, :margin => 10
   end
   

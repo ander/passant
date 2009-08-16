@@ -9,11 +9,28 @@ module ShoesUI
     
     attr_accessor :square_size
     
-    def initialize(app)
+    def initialize(app, offset)
       @app = app
+      @offset = offset
       @board = ::Board.new
       @square_size = DefaultSquareSize
       draw
+      
+      @app.click do |button, left, top|
+        click_square(get_square(left,top)) if button == 1
+      end
+      
+      @app.release do |button, left, top|
+        release_square(get_square(left,top)) if button == 1
+      end
+
+      @app.motion do |left, top|
+        if @selected_piece
+          @selected_piece.draw(self, @app, 
+                [left - (@square_size / 2) - @selected_piece.pos_adj[0],
+                 top  - (@square_size / 2) - @selected_piece.pos_adj[1]])
+        end
+      end
     end
     
     def size; [(square_size*8)+2]*2 end
@@ -27,11 +44,36 @@ module ShoesUI
 
     def square_top(x,y); (7-y)*square_size end
     def square_left(x,y); x*square_size end
-
     def is_white_square?(x,y); (x+y+1) % 2 == 0 end 
     
-    private
+    def get_square(left,top)
+      x = (left - @offset[0]) / @square_size
+      y = 7 - ((top - @offset[0]) / @square_size)
+      return nil if x < 0 or y < 0
+      [x,y]
+    end
     
+    private
+
+    def click_square(pos)
+      return if pos.nil?
+      @app.debug "Square #{pos.inspect} clicked"
+      @selected_piece = @board.at(pos)
+    end
+    
+    def release_square(pos)
+      return if pos.nil?
+      @app.debug "Square #{pos.inspect} released"
+      
+      if @selected_piece
+        move = @selected_piece.moves.detect{|mv| mv.to == pos}
+        move.apply if move
+        
+        @selected_piece.draw(self, @app)
+        @selected_piece = nil
+      end
+    end
+
     def draw_squares
       @app.stroke @app.saddlebrown
       
@@ -43,6 +85,6 @@ module ShoesUI
         end
       end
     end
-
+    
   end
 end

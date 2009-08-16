@@ -3,21 +3,27 @@
 class Piece
 
   # TODO override capture / promote etc.
-
-  def draw(ui_board, app)
+  
+  def draw(ui_board, app, ui_pos=ui_position(ui_board))
     if @image
-      # move / redraw
+      @image.move ui_pos[0] + pos_adj[0], ui_pos[1] + pos_adj[1]
     else
       path = image_file_path
       return unless File.exists?(path)
-      @image = app.image path, 
-               :left => ui_board.square_left(self.x, self.y) + 10, 
-               :top => ui_board.square_top(self.x, self.y) + 5
+      @image = app.image path, :left => ui_pos[0] + pos_adj[0], 
+                               :top => ui_pos[1] + pos_adj[1]
     end
   end
+
+  def pos_adj; [10, 5] end
   
   private
-  
+
+  def ui_position(ui_board)
+    [ui_board.square_left(self.x, self.y),
+     ui_board.square_top(self.x, self.y)]
+  end
+
   def image_file_path
     File.expand_path File.join(File.dirname(__FILE__), 'images', 
                      "#{self.color}_#{self.class}.png".downcase)
