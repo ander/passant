@@ -43,4 +43,6 @@ class Castling < Move
     @to[0] == 2 ? '0-0-0' : '0-0'
   end
 
+  def participants; [@piece, @rook].compact end
+
 end

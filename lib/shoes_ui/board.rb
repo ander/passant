@@ -67,9 +67,14 @@ module ShoesUI
       
       if @selected_piece
         move = @selected_piece.moves.detect{|mv| mv.to == pos}
-        move.apply if move
         
-        @selected_piece.draw(self, @app)
+        if move
+          move.apply 
+          move.participants.each {|p| p.draw(self, @app) }
+        else
+          @selected_piece.draw(self, @app)
+        end
+        
         @selected_piece = nil
       end
     end

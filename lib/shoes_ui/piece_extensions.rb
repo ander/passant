@@ -1,11 +1,11 @@
 # UI extensions for Piece
 
 class Piece
-
-  # TODO override capture / promote etc.
   
   def draw(ui_board, app, ui_pos=ui_position(ui_board))
-    if @image
+    if !self.board.pieces.include?(self)
+      @image.hide if @image
+    elsif @image
       @image.move ui_pos[0] + pos_adj[0], ui_pos[1] + pos_adj[1]
     else
       path = image_file_path

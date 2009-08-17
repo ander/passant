@@ -38,6 +38,8 @@ class Move
     "#{l}#{chess_coords(@from)}#{c}#{chess_coords(@to)}"
   end
 
+  def participants; [@piece, @capture_piece].compact end
+
   def inspect; to_s; end
   
 end
