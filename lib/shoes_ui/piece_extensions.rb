@@ -17,6 +17,18 @@ class Piece
 
   def pos_adj; [10, 5] end
   
+  alias_method :capture_without_ui, :capture
+  def capture
+    capture_without_ui
+    @image.hide if @image
+  end
+
+  alias_method :uncapture_without_ui, :uncapture
+  def uncapture
+    uncapture_without_ui
+    @image.show if @image
+  end
+  
   private
 
   def ui_position(ui_board)
