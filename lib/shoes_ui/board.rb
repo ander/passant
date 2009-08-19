@@ -57,13 +57,11 @@ module ShoesUI
 
     def click_square(pos)
       return if pos.nil?
-      @app.debug "Square #{pos.inspect} clicked"
       @selected_piece = @board.at(pos)
     end
     
     def release_square(pos)
       return if pos.nil?
-      @app.debug "Square #{pos.inspect} released"
       
       if @selected_piece
         move = @selected_piece.moves.detect{|mv| mv.to == pos}

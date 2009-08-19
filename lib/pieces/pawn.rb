@@ -21,12 +21,12 @@ class Pawn < Piece
                      @board.rules.valid_linear_move?(mv2, false, recurse)
     
     # capture 1
-    c1 = Move.new(self, [x+1, y+advance_direction])
+    c1 = move_class.new(self, [x+1, y+advance_direction])
     mvs.push(c1) if self.enemy?(@board.at([x+1, y+advance_direction])) and \
                     @board.rules.valid_move?(c1, true, recurse)
 
     # capture 2
-    c2 = Move.new(self, [x-1, y+advance_direction])
+    c2 = move_class.new(self, [x-1, y+advance_direction])
     mvs.push(c2) if self.enemy?(@board.at([x-1, y+advance_direction])) and \
                     @board.rules.valid_move?(c2, true, recurse)
     

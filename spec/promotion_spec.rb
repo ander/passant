@@ -15,7 +15,7 @@ describe Promotion do
     mv = Promotion.new(board.at(a7), a8)
     mv.apply
     
-    after_promo  = Board.new(
+    after_promo = Board.new(
               [ 'Q.......',
                 '........',
                 '........',
@@ -26,7 +26,37 @@ describe Promotion do
                 '........'  ])
     
     board.should == after_promo
+    board.pieces.size.should == 1
   end
+
+  it "should do a capturing promotion" do
+    board = Board.new(
+              [ '.n......',
+                'P.......',
+                '........',
+                '........',
+                '........',
+                '........',
+                '........',
+                '........'  ])
+
+    mv = Promotion.new(board.at(a7), b8)
+    mv.apply
+    
+    after_promo = Board.new(
+              [ '.Q......',
+                '........',
+                '........',
+                '........',
+                '........',
+                '........',
+                '........',
+                '........'  ])
+    
+    board.should == after_promo
+    board.pieces.size.should == 1
+  end
+
 
   describe "#take_back" do
     it "should undo promotion" do     
