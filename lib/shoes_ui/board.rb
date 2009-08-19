@@ -7,13 +7,14 @@ module ShoesUI
     DefaultSquareSize = 60
     def self.default_size; [(DefaultSquareSize * 8)+2]*2 end
     
-    attr_accessor :square_size
+    attr_accessor :square_size, :container
     
     def initialize(app, offset)
       @app = app
       @offset = offset
       @board = ::Board.new
       @square_size = DefaultSquareSize
+      @container = @app.stack :width => size[0], :height => size[1]
       draw
       
       @app.click do |button, left, top|
@@ -36,10 +37,8 @@ module ShoesUI
     def size; [(square_size*8)+2]*2 end
 
     def draw
-      @app.stack :width => size[0], :height => size[1] do
-        draw_squares
-        @board.pieces.each {|piece| piece.draw(self, @app)}
-      end
+      draw_squares
+      @board.pieces.each {|piece| piece.draw(self, @app)}
     end
 
     def square_top(x,y); (7-y)*square_size end
@@ -78,13 +77,15 @@ module ShoesUI
     end
 
     def draw_squares
-      @app.stroke @app.saddlebrown
+      @container.append do
+        @app.stroke @app.saddlebrown
       
-      8.times do |x|
-        8.times do |y|
-          @app.fill (is_white_square?(x,y) ? @app.white : @app.black)
-          @app.rect :width => square_size, :height => square_size,
-                    :top => square_top(x,y), :left => square_left(x,y)
+        8.times do |x|
+          8.times do |y|
+            @app.fill (is_white_square?(x,y) ? @app.white : @app.black)
+            @app.rect :width => square_size, :height => square_size,
+                      :top => square_top(x,y), :left => square_left(x,y)
+          end
         end
       end
     end

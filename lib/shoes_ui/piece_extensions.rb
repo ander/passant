@@ -10,8 +10,10 @@ class Piece
     else
       path = image_file_path
       return unless File.exists?(path)
-      @image = app.image path, :left => ui_pos[0] + pos_adj[0], 
-                               :top => ui_pos[1] + pos_adj[1]
+      ui_board.container.append do
+        @image = app.image path, :left => ui_pos[0] + pos_adj[0], 
+                                 :top => ui_pos[1] + pos_adj[1]
+      end
     end
   end
 
