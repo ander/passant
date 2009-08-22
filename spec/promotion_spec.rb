@@ -1,8 +1,8 @@
 require File.dirname(__FILE__)+"/../lib/board.rb"
 
-describe Promotion do
+describe Passant::Promotion do
   it "should promote a pawn" do    
-    board = Board.new(
+    board = Passant::Board.new(
               [ '........',
                 'P.......',
                 '........',
@@ -12,10 +12,10 @@ describe Promotion do
                 '........',
                 '........'  ])
 
-    mv = Promotion.new(board.at(a7), a8)
+    mv = Passant::Promotion.new(board.at(a7), a8)
     mv.apply
     
-    after_promo = Board.new(
+    after_promo = Passant::Board.new(
               [ 'Q.......',
                 '........',
                 '........',
@@ -30,7 +30,7 @@ describe Promotion do
   end
 
   it "should do a capturing promotion" do
-    board = Board.new(
+    board = Passant::Board.new(
               [ '.n......',
                 'P.......',
                 '........',
@@ -40,10 +40,10 @@ describe Promotion do
                 '........',
                 '........'  ])
 
-    mv = Promotion.new(board.at(a7), b8)
+    mv = Passant::Promotion.new(board.at(a7), b8)
     mv.apply
     
-    after_promo = Board.new(
+    after_promo = Passant::Board.new(
               [ '.Q......',
                 '........',
                 '........',
@@ -69,12 +69,12 @@ describe Promotion do
                   '........',
                   '........'  ]
       
-      board = Board.new(setting)
+      board = Passant::Board.new(setting)
       
-      mv = Promotion.new(board.at(a7), a8)
+      mv = Passant::Promotion.new(board.at(a7), a8)
       mv.apply
     
-      after_promo  = Board.new(
+      after_promo  = Passant::Board.new(
               [ 'Q.......',
                 '........',
                 '........',
@@ -86,7 +86,7 @@ describe Promotion do
     
       board.should == after_promo
       mv.take_back
-      board.should == Board.new(setting)
+      board.should == Passant::Board.new(setting)
     end
   end
 

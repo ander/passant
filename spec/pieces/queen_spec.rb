@@ -1,11 +1,11 @@
 require File.dirname(__FILE__)+"/../../lib/board.rb"
 
-describe Queen do
+describe Passant::Queen do
   describe "#moves" do
     it "should return all moves in center squares" do
-      board = Board.new_empty
+      board = Passant::Board.new_empty
       
-      q = Queen.new(board, e5)
+      q = Passant::Queen.new(board, e5)
       moves = q.moves.map{|m| m.to}
       moves.size.should == 27
       ([d4, c3, b2, a1, f6, g7, h8,

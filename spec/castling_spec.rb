@@ -1,8 +1,8 @@
 require File.dirname(__FILE__)+"/../lib/board.rb"
 
-describe Castling do
+describe Passant::Castling do
   it "should move pieces correctly, short" do
-    board = Board.new(
+    board = Passant::Board.new(
               [ '........',
                 '........',
                 '........',
@@ -12,7 +12,7 @@ describe Castling do
                 'PPPQ.PPP',
                 'RN..K..R'  ])
     
-    expected = Board.new(
+    expected = Passant::Board.new(
               [ '........',
                 '........',
                 '........',
@@ -22,12 +22,12 @@ describe Castling do
                 'PPPQ.PPP',
                 'RN...RK.'  ])
     
-    castling = Castling.new(board.king(:white), g1)
+    castling = Passant::Castling.new(board.king(:white), g1)
     board.after_move(castling).should == expected
   end
 
   it "should move pieces correctly, long" do
-    board = Board.new(
+    board = Passant::Board.new(
               [ '........',
                 '........',
                 '........',
@@ -37,7 +37,7 @@ describe Castling do
                 'PPPQPPPP',
                 'R...KBNR'  ])
 
-    expected = Board.new(
+    expected = Passant::Board.new(
               [ '........',
                 '........',
                 '........',
@@ -47,7 +47,7 @@ describe Castling do
                 'PPPQPPPP',
                 '..KR.BNR'  ])
 
-    castling = Castling.new(board.king(:white), c1)
+    castling = Passant::Castling.new(board.king(:white), c1)
     board.after_move(castling).should == expected
   end
 
@@ -62,9 +62,9 @@ describe Castling do
                   'PPPQ.PPP',
                   'RN..K..R'  ]
 
-      board = Board.new(setting)
+      board = Passant::Board.new(setting)
     
-      expected = Board.new(
+      expected = Passant::Board.new(
               [ '........',
                 '........',
                 '........',
@@ -74,11 +74,11 @@ describe Castling do
                 'PPPQ.PPP',
                 'RN...RK.'  ])
 
-      castling = Castling.new(board.king(:white), g1)
+      castling = Passant::Castling.new(board.king(:white), g1)
       castling.apply
       board.should == expected
       castling.take_back
-      board.should == Board.new(setting)
+      board.should == Passant::Board.new(setting)
     end
 
     it "should undo castling (2)" do
@@ -90,8 +90,8 @@ describe Castling do
                   '..N.....',
                   'PPPQPPPP',
                   'R...KBNR'  ]
-      board = Board.new(setting)
-      expected = Board.new(
+      board = Passant::Board.new(setting)
+      expected = Passant::Board.new(
               [ '........',
                 '........',
                 '........',
@@ -101,11 +101,11 @@ describe Castling do
                 'PPPQPPPP',
                 '..KR.BNR'  ])
 
-      castling = Castling.new(board.king(:white), c1)
+      castling = Passant::Castling.new(board.king(:white), c1)
       castling.apply
       board.should == expected
       castling.take_back
-      board.should == Board.new(setting)
+      board.should == Passant::Board.new(setting)
     end
   end
 

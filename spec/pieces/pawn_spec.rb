@@ -1,29 +1,29 @@
 require File.dirname(__FILE__)+"/../../lib/board.rb"
 
-describe Pawn do
+describe Passant::Pawn do
   describe "#moves" do
     it "should return one step forward" do
-      board = Board.new_empty
-      p = Pawn.new(board, a2)
+      board = Passant::Board.new_empty
+      p = Passant::Pawn.new(board, a2)
       p.moves.map{|m| m.to}.should include(a3)
     end
 
     it "should return two steps forward if not moved before" do
-      board = Board.new_empty
-      p = Pawn.new(board, a2)
+      board = Passant::Board.new_empty
+      p = Passant::Pawn.new(board, a2)
       p.should_receive(:moved?).once.and_return(false)
       p.moves.map{|m| m.to}.should include(a4)
     end
     
     it "should not return two steps forward if moved before" do
-      board = Board.new_empty
-      p = Pawn.new(board, a2)
+      board = Passant::Board.new_empty
+      p = Passant::Pawn.new(board, a2)
       p.should_receive(:moved?).once.and_return(true)
       p.moves.map{|m| m.to}.should_not include(a4)
     end
 
     it "should return a capture when possible" do
-      board = Board.new(
+      board = Passant::Board.new(
               [ '........',
                 '........',
                 '........',
@@ -39,7 +39,7 @@ describe Pawn do
     end
     
     it "should return a capture when possible, part 2" do
-      board = Board.new(
+      board = Passant::Board.new(
               [ '........',
                 '........',
                 '........',
@@ -55,7 +55,7 @@ describe Pawn do
     end
 
     it "should create a promotion when advancing to last rank" do
-      board = Board.new(
+      board = Passant::Board.new(
               [ '........',
                 'P.......',
                 '........',
@@ -66,8 +66,8 @@ describe Pawn do
                 '........'  ])
       white_pawn = board.at(a7)
       black_pawn = board.at(b2)
-      white_pawn.moves.map{|m| m.class}.should == [Promotion]
-      black_pawn.moves.map{|m| m.class}.should == [Promotion]
+      white_pawn.moves.map{|m| m.class}.should == [Passant::Promotion]
+      black_pawn.moves.map{|m| m.class}.should == [Passant::Promotion]
     end
 
   end

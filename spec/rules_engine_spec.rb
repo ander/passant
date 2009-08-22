@@ -1,10 +1,10 @@
 require File.dirname(__FILE__)+"/../lib/board.rb"
 
-describe RulesEngine do
+describe Passant::RulesEngine do
   
   describe "#valid_linear_move?" do
     it "should exclude moves which end on or jump over own pieces" do
-      board = Board.new_empty
+      board = Passant::Board.new_empty
       board.set(['........', 
                  '........', 
                  '........', 
@@ -14,14 +14,14 @@ describe RulesEngine do
                  'PP......', 
                  'RN......'])
       rook = board.at(a1)
-      mv = Move.new(rook, a2)
+      mv = Passant::Move.new(rook, a2)
       board.rules.valid_linear_move?(mv).should == false
-      mv2 = Move.new(rook, a3)
+      mv2 = Passant::Move.new(rook, a3)
       board.rules.valid_linear_move?(mv2).should == false
     end
     
     it "should exclude moves which jump over enemy pieces" do
-      board = Board.new_empty
+      board = Passant::Board.new_empty
       board.set(['........', 
                  '........', 
                  '........', 
@@ -31,15 +31,15 @@ describe RulesEngine do
                  'pP......', 
                  'RN......'])
       rook = board.at(a1)
-      mv = Move.new(rook, a2)
+      mv = Passant::Move.new(rook, a2)
       board.rules.valid_linear_move?(mv).should == true
-      mv2 = Move.new(rook, a3)
+      mv2 = Passant::Move.new(rook, a3)
       board.rules.valid_linear_move?(mv2).should == false
     end
   end
   
   it "should not allow moves which cause self check" do
-    board = Board.new_empty
+    board = Passant::Board.new_empty
     board.set(['...r....', 
                '........', 
                '........', 
@@ -54,7 +54,7 @@ describe RulesEngine do
   end
   
   it "should not allow moves which ignore self check" do
-    board = Board.new_empty
+    board = Passant::Board.new_empty
     board.set(['........', 
                '........', 
                '........', 
@@ -68,7 +68,7 @@ describe RulesEngine do
   end
   
   it "should allow to block a check" do
-    board = Board.new_empty
+    board = Passant::Board.new_empty
     board.set(['........', 
                '........', 
                '........', 
@@ -83,7 +83,7 @@ describe RulesEngine do
   end
   
   it "should recognize draw" do
-    board = Board.new(
+    board = Passant::Board.new(
               ['.r......', 
                '........', 
                '........', 
@@ -96,7 +96,7 @@ describe RulesEngine do
   end
 
   it "should recognize checkmate" do
-    board = Board.new(
+    board = Passant::Board.new(
               ['.r......', 
                '........', 
                'r.......', 
@@ -109,7 +109,7 @@ describe RulesEngine do
   end
 
   it "should allow long castling" do
-    board = Board.new(
+    board = Passant::Board.new(
               [ '........',
                 '........',
                 '........',
@@ -125,7 +125,7 @@ describe RulesEngine do
   end
 
   it "should allow short castling" do
-    board = Board.new(
+    board = Passant::Board.new(
               [ '........',
                 '........',
                 '........',

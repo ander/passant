@@ -1,10 +1,10 @@
 require File.dirname(__FILE__)+"/../lib/board.rb"
 
-describe EnPassant do
+describe Passant::EnPassant do
   it "should move pieces correctly" do
     # black's move
     
-    board = Board.new(
+    board = Passant::Board.new(
               [ '........',
                 '...p....',
                 '....p...',
@@ -16,7 +16,7 @@ describe EnPassant do
     mv = board.at(d7).moves.last
     mv.apply
     
-    after_black_move  = Board.new(
+    after_black_move  = Passant::Board.new(
               [ '........',
                 '........',
                 '....p...',
@@ -29,9 +29,9 @@ describe EnPassant do
     board.should == after_black_move
     board.at(e5).moves.size.should == 1
     mv = board.at(e5).moves.first
-    mv.should be_kind_of(EnPassant)
+    mv.should be_kind_of(Passant::EnPassant)
     mv.apply
-    expected  = Board.new(
+    expected  = Passant::Board.new(
               [ '........',
                 '........',
                 '...Pp...',
@@ -46,7 +46,7 @@ describe EnPassant do
   it "should move pieces correctly, part 2" do
     # black's move
     
-    board = Board.new(
+    board = Passant::Board.new(
               [ '........',
                 '.....p..',
                 '....p...',
@@ -58,7 +58,7 @@ describe EnPassant do
     mv = board.at(f7).moves.last
     mv.apply
     
-    after_black_move  = Board.new(
+    after_black_move  = Passant::Board.new(
               [ '........',
                 '........',
                 '....p...',
@@ -71,9 +71,9 @@ describe EnPassant do
     board.should == after_black_move
     board.at(e5).moves.size.should == 1
     mv = board.at(e5).moves.first
-    mv.should be_kind_of(EnPassant)
+    mv.should be_kind_of(Passant::EnPassant)
     mv.apply
-    expected  = Board.new(
+    expected  = Passant::Board.new(
               [ '........',
                 '........',
                 '....pP..',
