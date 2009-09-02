@@ -1,4 +1,4 @@
-require File.dirname(__FILE__)+"/../../lib/board.rb"
+require 'passant/board'
 
 describe Passant::Rook do
   describe "#moves" do

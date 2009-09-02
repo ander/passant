@@ -4,10 +4,15 @@ Basic chess board.
 
 =end
 
-require File.dirname(__FILE__)+"/squares"
-require File.dirname(__FILE__)+"/piece"
-Dir.glob(File.dirname(__FILE__)+"/pieces/*.rb").each {|p| require p}
-require File.dirname(__FILE__)+"/rules_engine"
+require 'passant/squares'
+require 'passant/piece'
+require 'passant/pieces/bishop'
+require 'passant/pieces/king'
+require 'passant/pieces/knight'
+require 'passant/pieces/pawn'
+require 'passant/pieces/queen'
+require 'passant/pieces/rook'
+require 'passant/rules_engine'
 
 module Passant
 

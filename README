@@ -3,3 +3,35 @@ Passant
 
 A small ruby library for chess experiments.
 
+
+Example
+=======
+
+Requires are relative to lib/ so you add it to your load path one way or another.
+
+[running irb under lib/]
+
+irb(main):001:0> require 'passant/board'
+=> true
+irb(main):002:0> b = Passant::Board.new
+=> 
+rnbqkbnr
+pppppppp
+........
+........
+........
+........
+PPPPPPPP
+RNBQKBNR
+irb(main):003:0> b.at(a2).moves.first.apply
+=> [Pa2a3]
+irb(main):004:0> b
+=> 
+rnbqkbnr
+pppppppp
+........
+........
+........
+P.......
+.PPPPPPP
+RNBQKBNR

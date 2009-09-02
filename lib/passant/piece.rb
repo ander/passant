@@ -4,11 +4,10 @@ Base class for chess pieces.
 
 =end
 
-require File.dirname(__FILE__)+"/move"
-require File.dirname(__FILE__)+"/castling"
-require File.dirname(__FILE__)+"/en_passant"
-require File.dirname(__FILE__)+"/promotion"
-
+require 'passant/move'
+require 'passant/castling'
+require 'passant/en_passant'
+require 'passant/promotion'
 
 module Passant
 

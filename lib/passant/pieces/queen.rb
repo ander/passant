@@ -1,4 +1,4 @@
-require File.dirname(__FILE__)+"/../piece"
+require 'passant/piece'
 
 module Passant
 
