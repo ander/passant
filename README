@@ -7,7 +7,7 @@ A small ruby library for chess experiments.
 Example
 =======
 
-Requires are relative to lib/ so you add it to your load path one way or another.
+Requires are relative to lib/ so you have to add it to your load path one way or another.
 
 [running irb under lib/]
 
