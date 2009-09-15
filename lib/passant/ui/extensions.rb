@@ -30,6 +30,7 @@ module Passant
         ui.draw_square(from, dc)
         ui.draw_square(to, dc)
         ui.draw_square(@rook_from, dc) if @rook_from # castlings
+        ui.draw_square(@capture_piece.position, dc) if self.class == EnPassant
         participants.each {|p| p.draw(dc)}
       end
     end
