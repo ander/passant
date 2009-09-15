@@ -66,6 +66,9 @@ module Passant
     def uncapture
       @board.add_piece(self) unless @board.pieces.include?(self)
     end
+    def active?
+      @board.pieces.include?(self)
+    end
   end
 
 end
