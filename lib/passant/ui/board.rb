@@ -70,10 +70,7 @@ module Passant::UI
         m.to == pos_for_point(mouse_event.get_position)
       end
       
-      if mv
-        old_pos = mv.from
-        mv.apply_with_ui
-      end
+      mv.apply_with_ui if mv
       
       @piece = nil
     end
