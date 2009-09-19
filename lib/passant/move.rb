@@ -25,6 +25,7 @@ module Passant
       @piece.position = @to
       @piece.history << self
       @piece.board.history << self
+      self
     end
   
     def take_back

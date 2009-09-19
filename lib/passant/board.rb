@@ -1,8 +1,3 @@
-=begin rdoc
-
-Basic chess board.
-
-=end
 
 require 'passant/squares'
 require 'passant/piece'
@@ -16,7 +11,10 @@ require 'passant/rules_engine'
 
 module Passant
 
+  # Basic chess board.
   class Board
+    class InvalidMove < StandardError; end
+    
     PieceLetterMap = { Pawn   => ['P','p'],
                        Rook   => ['R','r'],
                        Knight => ['N','n'],
@@ -43,6 +41,14 @@ module Passant
 
     def self.new_empty
       Board.new(['.'*8]*8)
+    end
+
+    # The method to call to move a piece
+    def move(from, to)
+      piece = self.at(from)
+      mv = piece ? piece.moves.detect{|m| m.to == to} : nil
+      raise InvalidMove.new('Invalid move') unless mv
+      mv.apply
     end
 
     def add_piece(piece)

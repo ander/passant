@@ -13,23 +13,28 @@ module Passant
     def ui; @ui end
 
     alias_method :add_piece_without_ui, :add_piece
-    
     def add_piece(piece)
       add_piece_without_ui(piece)
       piece.initialize_ui(@ui) if @ui
     end
+    
+    alias_method :move_without_ui, :move
+    def move(from, to)
+      mv = move_without_ui(from, to)
+      mv.draw
+    end
+    
   end
   
   class Move
     
-    def apply_with_ui
-      apply
+    def draw
       return unless ui = @piece.board.ui
       
       ui.paint do |dc|
         ui.draw_square(from, dc)
         ui.draw_square(to, dc)
-        ui.draw_square(@rook_from, dc) if @rook_from # castlings
+        ui.draw_square(@rook_from, dc) if self.class == Castling
         ui.draw_square(@capture_piece.position, dc) if self.class == EnPassant
         participants.each {|p| p.draw(dc)}
       end

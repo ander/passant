@@ -60,19 +60,13 @@ module Passant::UI
 
     #### Mouse actions ####
     def click_piece(mouse_event)
-      @piece = @board.at(pos_for_point(mouse_event.get_position))
+      @from = pos_for_point(mouse_event.get_position)
     end
     
     def release_piece(mouse_event)
-      return unless @piece
-      
-      mv = @piece.moves.detect do |m| 
-        m.to == pos_for_point(mouse_event.get_position)
-      end
-      
-      mv.apply_with_ui if mv
-      
-      @piece = nil
+      return unless @from
+      @board.move(@from, pos_for_point(mouse_event.get_position)) rescue nil
+      @from = nil
     end
     
   end
