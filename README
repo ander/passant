@@ -23,15 +23,16 @@ pppppppp
 ........
 PPPPPPPP
 RNBQKBNR
-irb(main):003:0> b.at(a2).moves.first.apply
-=> [Pa2a3]
+irb(main):003:0> b.move(a2,a4)
+=> Pa2a4
 irb(main):004:0> b
 => 
 rnbqkbnr
 pppppppp
 ........
 ........
-........
 P.......
+........
 .PPPPPPP
 RNBQKBNR
+irb(main):005:0> 
