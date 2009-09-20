@@ -22,6 +22,7 @@ module Passant
     def move(from, to)
       mv = move_without_ui(from, to)
       mv.draw
+      mv
     end
     
   end

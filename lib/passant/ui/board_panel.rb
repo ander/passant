@@ -1,28 +1,15 @@
 
-require 'passant/board'
-require 'passant/ui/extensions'
-require 'passant/ui/common'
-
 module Passant::UI
-  
-  # The main frame of the UI is called Board
-  class Board < Wx::Frame
-    
-    def initialize
-      super(nil, 
-            :title => "Passant", 
-            :pos => [150, 25], 
-            :size => [480, 480],
-            :style => Wx::MINIMIZE_BOX|Wx::MAXIMIZE_BOX|Wx::SYSTEM_MENU|\
-                      Wx::CAPTION|Wx::CLOSE_BOX|Wx::CLIP_CHILDREN)
+  class BoardPanel < Wx::Panel
+    def initialize(parent)
+      super(parent, :size => [480,480])
       evt_paint     :paint_board
       evt_left_down :click_piece
       evt_left_up   :release_piece
-
-      set_board Passant::Board.new
+      
+      set_board Passant::GameBoard.new
       @white = Passant::UI.bitmapify('white_square.png')
       @black = Passant::UI.bitmapify('black_square.png')
-      
       show
     end
     
@@ -38,7 +25,7 @@ module Passant::UI
 
       dc.draw_bitmap(square, x*60, y*60, true)
     end
-    
+
     private
 
     def paint_board
@@ -65,10 +52,18 @@ module Passant::UI
     
     def release_piece(mouse_event)
       return unless @from
-      @board.move(@from, pos_for_point(mouse_event.get_position)) rescue nil
+      
+      to = pos_for_point(mouse_event.get_position)
+      if to
+        begin
+          mv = @board.move(@from, to)
+          parent.set_status(mv.to_s)
+        rescue Passant::Board::Error => e
+          parent.set_status(e.message)
+        end
+      end
       @from = nil
     end
     
   end
-  
 end

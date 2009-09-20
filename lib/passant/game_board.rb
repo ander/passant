@@ -6,7 +6,7 @@ module Passant
   # A board with alternating turns for white and black.
   # Also, raises GameOver exception if checkmate or draw.
   class GameBoard < Board
-    class GameOver < StandardError; end
+    class GameOver < Board::Error; end
     
     attr_reader :turn
     
@@ -36,15 +36,20 @@ module Passant
         raise Board::InvalidMove.new("#{@turn.to_s.capitalize}'s turn!")
       end
       
-      super
+      mv = super
       
       @turn = opponent(@turn)
       update_result
       
       raise_if_result
+      mv
     end
     
-    # TODO override takeback
+    def take_back
+      super
+      @result = nil
+      self
+    end
     
     private
 

@@ -13,7 +13,8 @@ module Passant
 
   # Basic chess board.
   class Board
-    class InvalidMove < StandardError; end
+    class Error < StandardError; end
+    class InvalidMove < Error; end
     
     PieceLetterMap = { Pawn   => ['P','p'],
                        Rook   => ['R','r'],

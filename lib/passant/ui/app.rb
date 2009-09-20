@@ -1,11 +1,11 @@
 
 require 'wx'
-require 'passant/ui/board'
+require 'passant/ui/main_frame'
 
 module Passant::UI
   class App < Wx::App
     def on_init
-      Board.new
+      MainFrame.new
     end
   end
 end
