@@ -31,8 +31,9 @@ module Passant
     # can also be called after the game is over
     def move(from, to)
       raise_if_result
+      piece = self.at(from)
       
-      if self.at(from).color != @turn
+      if piece and piece.color != @turn
         raise Board::InvalidMove.new("#{@turn.to_s.capitalize}'s turn!")
       end
       
@@ -48,6 +49,7 @@ module Passant
     def take_back
       super
       @result = nil
+      @turn = opponent(@turn)
       self
     end
     

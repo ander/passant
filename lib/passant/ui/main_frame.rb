@@ -1,8 +1,5 @@
-
-require 'passant/game_board'
 require 'passant/ui/board_panel'
-require 'passant/ui/extensions'
-require 'passant/ui/common'
+require 'passant/ui/control_panel'
 
 module Passant::UI
   
@@ -12,14 +9,16 @@ module Passant::UI
       super(nil, 
             :title => "Passant", 
             :pos => [150, 25], 
-            :size => [480, 500],
+            :size => [480, 530],
             :style => Wx::MINIMIZE_BOX|Wx::MAXIMIZE_BOX|Wx::SYSTEM_MENU|\
                       Wx::CAPTION|Wx::CLOSE_BOX|Wx::CLIP_CHILDREN)
       
       sizer = Wx::BoxSizer.new(Wx::VERTICAL)
-      sizer.add(BoardPanel.new(self))
+      board_panel = BoardPanel.new(self)
+      control_panel = ControlPanel.new(self, board_panel)
       @status_bar = Wx::StatusBar.new(self)
-      sizer.add(@status_bar)
+      [board_panel, control_panel, @status_bar].each{|item| sizer.add(item)}
+      
       set_sizer(sizer)
       show
       set_status("Welcome.")

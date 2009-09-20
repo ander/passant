@@ -18,17 +18,23 @@ module Passant
       piece.initialize_ui(@ui) if @ui
     end
     
-    alias_method :move_without_ui, :move
-    def move(from, to)
-      mv = move_without_ui(from, to)
-      mv.draw
-      mv
-    end
-    
   end
   
   class Move
-    
+    alias_method :apply_without_ui, :apply
+    def apply
+      apply_without_ui
+      draw
+      self
+    end
+
+    alias_method :take_back_without_ui, :take_back
+    def take_back
+      take_back_without_ui
+      draw
+      self
+    end
+
     def draw
       return unless ui = @piece.board.ui
       
@@ -40,6 +46,7 @@ module Passant
         participants.each {|p| p.draw(dc)}
       end
     end
+    
   end
 
   class Piece

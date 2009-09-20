@@ -1,6 +1,12 @@
 
+require 'passant/game_board'
+require 'passant/ui/extensions'
+require 'passant/ui/common'
+
 module Passant::UI
   class BoardPanel < Wx::Panel
+    attr_accessor :board
+    
     def initialize(parent)
       super(parent, :size => [480,480])
       evt_paint     :paint_board
@@ -26,8 +32,6 @@ module Passant::UI
       dc.draw_bitmap(square, x*60, y*60, true)
     end
 
-    private
-
     def paint_board
       paint do |dc|
         8.times do |x|
@@ -38,6 +42,8 @@ module Passant::UI
         @board.pieces.each {|p| p.draw(dc) }
       end
     end
+
+    private
 
     def pos_for_point(point)
       x = point.x / 60
@@ -54,7 +60,7 @@ module Passant::UI
       return unless @from
       
       to = pos_for_point(mouse_event.get_position)
-      if to
+      if !to.nil?
         begin
           mv = @board.move(@from, to)
           parent.set_status(mv.to_s)
