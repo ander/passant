@@ -61,7 +61,7 @@ module Passant::UI
       to = pos_for_point(mouse_event.get_position)
       
       if !to.nil?
-        
+        self.disable
         Wx::get_app.responsively do
           mv = @board.move(@from, to)
           parent.set_status(mv.to_s)
@@ -71,6 +71,7 @@ module Passant::UI
       end
       
       @from = nil
+      self.enable
     end
     
   end

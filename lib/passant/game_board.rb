@@ -6,7 +6,7 @@ module Passant
   # A board with alternating turns for white and black.
   # Also, raises GameOver exception if checkmate or draw.
   class GameBoard < Board
-    class GameOver < Board::Error; end
+    class GameOver < Board::Exception; end
     
     attr_reader :turn
     
