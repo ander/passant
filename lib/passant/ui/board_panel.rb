@@ -60,14 +60,28 @@ module Passant::UI
       return unless @from
       
       to = pos_for_point(mouse_event.get_position)
+      
       if !to.nil?
-        begin
-          mv = @board.move(@from, to)
-          parent.set_status(mv.to_s)
-        rescue Passant::Board::Error => e
-          parent.set_status(e.message)
+        
+        t = Thread.new(parent, @board, @from, to) do |par,b,from,to|
+          begin
+            mv = b.move(from, to)
+            par.set_status(mv.to_s)
+            Thread.exit
+          rescue Passant::Board::Error => e
+            par.set_status(e.message)
+          end
         end
+        
+        while t.alive?
+          parent.pulse
+          sleep(0.1)
+        end
+        
+        @board.history.last.draw
       end
+      
+      parent.ready
       @from = nil
     end
     

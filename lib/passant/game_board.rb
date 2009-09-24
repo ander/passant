@@ -47,10 +47,12 @@ module Passant
     end
     
     def take_back
-      super
-      @result = nil
-      @turn = opponent(@turn)
-      self
+      mv = super
+      if mv
+        @result = nil
+        @turn = opponent(@turn)
+      end
+      mv
     end
     
     private

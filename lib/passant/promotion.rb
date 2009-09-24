@@ -18,12 +18,14 @@ module Passant
       @promo_piece = @promo_type.new(@piece.board,
                                      @piece.position,
                                      @piece.color)
+      self
     end
   
     def take_back
       super
       @piece.board.remove_piece(@promo_piece)
       @piece.board.add_piece(@piece)
+      self
     end
   
     def to_s

@@ -134,7 +134,6 @@ module Passant
     def take_back
       last_mv = @history.last
       last_mv.take_back if last_mv
-      self
     end
 
     # N.B. does not take history into account

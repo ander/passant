@@ -21,28 +21,20 @@ module Passant
   end
   
   class Move
-    alias_method :apply_without_ui, :apply
-    def apply
-      apply_without_ui
-      draw
-      self
-    end
-
-    alias_method :take_back_without_ui, :take_back
-    def take_back
-      take_back_without_ui
-      draw
-      self
-    end
-
     def draw
       return unless ui = @piece.board.ui
       
       ui.paint do |dc|
         ui.draw_square(from, dc)
         ui.draw_square(to, dc)
-        ui.draw_square(@rook_from, dc) if self.class == Castling
+        
+        if self.class == Castling
+          ui.draw_square(@rook_from, dc)
+          ui.draw_square(@rook_to, dc)
+        end
+        
         ui.draw_square(@capture_piece.position, dc) if self.class == EnPassant
+        
         participants.each {|p| p.draw(dc)}
       end
     end
@@ -63,6 +55,6 @@ module Passant
       dc.draw_bitmap(@bitmap, x, y, true)
     end
   end
-
+  
 end
 

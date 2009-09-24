@@ -24,7 +24,11 @@ module Passant::UI
     end
     
     def take_back
-      @board_panel.board.take_back
+      mv = @board_panel.board.take_back
+      if mv
+        mv.draw
+        parent.set_status("Took back last move.")
+      end
     end
   end
 end

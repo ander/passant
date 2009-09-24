@@ -33,6 +33,7 @@ module Passant
       @piece.position = @from
       @piece.history.delete(self)
       @piece.board.history.delete(self)
+      self
     end
   
     def to_s
