@@ -54,7 +54,17 @@ module Passant
       end
       mv
     end
-    
+
+    def undo_takeback
+      mv = super
+      if mv
+        update_result
+        @turn = opponent(@turn)
+        raise_if_result
+      end
+      mv
+    end
+
     private
 
     def raise_if_result

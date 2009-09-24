@@ -25,6 +25,7 @@ module Passant
       @piece.position = @to
       @piece.history << self
       @piece.board.history << self
+      @piece.board.takebacks.clear unless @piece.board.takebacks.delete(self)
       self
     end
   
@@ -33,9 +34,10 @@ module Passant
       @piece.position = @from
       @piece.history.delete(self)
       @piece.board.history.delete(self)
+      @piece.board.takebacks << self
       self
     end
-  
+    
     def to_s
       l = @piece.board.letter_for_piece(@piece)
       c = capture? ? 'x' : ''

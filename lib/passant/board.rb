@@ -33,10 +33,11 @@ module Passant
                         'PPPPPPPP',
                         'RNBQKBNR'  ]
   
-    attr_reader :pieces, :rules, :history
+    attr_reader :pieces, :rules, :history, :takebacks
 
     def initialize(position=InitialPosition)
       @rules = RulesEngine.new(self)
+      @takebacks = []
       set position
     end
 
@@ -134,6 +135,11 @@ module Passant
     def take_back
       last_mv = @history.last
       last_mv.take_back if last_mv
+    end
+    
+    def undo_takeback
+      tb = @takebacks.last
+      tb.apply if tb
     end
 
     # N.B. does not take history into account

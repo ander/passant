@@ -4,15 +4,20 @@ module Passant::UI
       super(parent)
       @board_panel = board_panel
       reset_b = Wx::Button.new(self, Wx::ID_ANY, 'Reset')
-      take_back_b = Wx::Button.new(self, Wx::ID_ANY, 'Take back')
+      other_b = Wx::Button.new(self, Wx::ID_ANY, '...')
+      take_back_b = Wx::Button.new(self, Wx::ID_ANY, '<')
+      undo_takeback_b = Wx::Button.new(self, Wx::ID_ANY, '>')
 
       sizer = Wx::BoxSizer.new(Wx::HORIZONTAL)
-      sizer.add(reset_b)
-      sizer.add(take_back_b)
+      [reset_b, other_b, take_back_b, undo_takeback_b].each do |b|
+        sizer.add(b)
+      end
+      
       set_sizer(sizer)
       
-      evt_button(reset_b.id) { |event| reset_board }
-      evt_button(take_back_b.id) { |event| take_back }
+      evt_button(reset_b.id)         { |event| reset_board }
+      evt_button(take_back_b.id)     { |event| take_back }
+      evt_button(undo_takeback_b.id) { |event| undo_takeback }
     end
 
     private
@@ -27,7 +32,18 @@ module Passant::UI
       mv = @board_panel.board.take_back
       if mv
         mv.draw
-        parent.set_status("Took back last move.")
+        parent.set_status("Took back #{mv}.")
+      end
+    end
+
+    def undo_takeback
+      mv = Wx::get_app.responsively do
+        @board_panel.board.undo_takeback
+      end
+      
+      if mv
+        mv.draw
+        parent.set_status(mv.to_s)
       end
     end
   end

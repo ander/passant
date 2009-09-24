@@ -58,30 +58,18 @@ module Passant::UI
     
     def release_piece(mouse_event)
       return unless @from
-      
       to = pos_for_point(mouse_event.get_position)
       
       if !to.nil?
         
-        t = Thread.new(parent, @board, @from, to) do |par,b,from,to|
-          begin
-            mv = b.move(from, to)
-            par.set_status(mv.to_s)
-            Thread.exit
-          rescue Passant::Board::Error => e
-            par.set_status(e.message)
-          end
+        Wx::get_app.responsively do
+          mv = @board.move(@from, to)
+          parent.set_status(mv.to_s)
         end
         
-        while t.alive?
-          parent.pulse
-          sleep(0.1)
-        end
-        
-        @board.history.last.draw
+        @board.history.last.draw unless @board.history.empty?
       end
       
-      parent.ready
       @from = nil
     end
     
