@@ -1,5 +1,6 @@
 
 require 'passant/board'
+require 'passant/pgn_tags'
 
 module Passant
   
@@ -9,22 +10,22 @@ module Passant
     class GameOver < Board::Exception; end
     
     attr_reader :turn
+    include PGNTags
     
     def initialize
       super(Board::InitialPosition)
-      @result = nil
     end
     
     def reset
       super
       @turn = :white
-      @result = nil
+      self.result = '*'
     end
     
     def set(board_data, turn=:white)
       super(board_data)
       @turn = turn
-      @result = nil
+      self.result = '*'
       update_result unless board_data == Board::InitialPosition
     end
     
@@ -49,7 +50,7 @@ module Passant
     def take_back
       mv = super
       if mv
-        @result = nil
+        self.result = '*'
         @turn = opponent(@turn)
       end
       mv
@@ -68,14 +69,14 @@ module Passant
     private
 
     def raise_if_result
-      raise GameOver.new(@result) if @result
+      raise GameOver.new(self.result) if self.result != '*'
     end
     
     def update_result
-      if self.rules.checkmate?(@turn)
-        @result = "Checkmate (#{opponent(@turn)} wins)" 
+      if self.rules.checkmate?(@turn) 
+        self.result = (@turn == :black ? '1-0' : '0-1') 
       end
-      @result = "Draw" if self.rules.draw?(@turn)
+      self.result = '1/2-1/2' if self.rules.draw?(@turn)
     end
     
     # TODO: refactor

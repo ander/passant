@@ -33,7 +33,7 @@ describe Passant::GameBoard do
              '..R.....', 
              '.R......'], :white)
       lambda { b.move(c2, a2)}.should raise_error(Passant::GameBoard::GameOver,
-                                                  "Checkmate (white wins)")
+                                                  "1-0")
     end
     
     it "should raise GameOver when game drawn" do
@@ -47,7 +47,7 @@ describe Passant::GameBoard do
              '..R.....', 
              '.R......'], :white)
       lambda { b.move(c2, c7)}.should raise_error(Passant::GameBoard::GameOver,
-                                                  "Draw")
+                                                  "1/2-1/2")
     end
 
   end
