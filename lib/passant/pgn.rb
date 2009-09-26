@@ -29,10 +29,10 @@ module Passant
       def tags
         @tags ||= Tag.required 
       end
-    
-      def result; self.tags[6].value end
-      def result=(r); self.tags[6].value = r end
-    
+      
+      def pgn_result; self.tags[6].value end
+      def pgn_result=(r); self.tags[6].value = r end
+      
       def pgn_tags; tags.map{|t| t.to_pgn}.join("\n") end
     end
   end

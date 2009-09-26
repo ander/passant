@@ -19,13 +19,14 @@ module Passant
     def reset
       super
       @turn = :white
-      self.result = '*'
+      @board_result = '*' # kept separate from the PGN result tag,
+                          # which is updated only when the game ends
     end
     
     def set(board_data, turn=:white)
       super(board_data)
       @turn = turn
-      self.result = '*'
+      @board_result = '*'
       update_result unless board_data == Board::InitialPosition
     end
     
@@ -50,7 +51,7 @@ module Passant
     def take_back
       mv = super
       if mv
-        self.result = '*'
+        @board_result = '*'
         @turn = opponent(@turn)
       end
       mv
@@ -69,14 +70,17 @@ module Passant
     private
 
     def raise_if_result
-      raise GameOver.new(self.result) if self.result != '*'
+      if @board_result != '*'
+        self.pgn_result = @board_result
+        raise GameOver.new(@board_result)
+      end
     end
     
     def update_result
       if self.rules.checkmate?(@turn) 
-        self.result = (@turn == :black ? '1-0' : '0-1') 
+        @board_result = (@turn == :black ? '1-0' : '0-1') 
       end
-      self.result = '1/2-1/2' if self.rules.draw?(@turn)
+      @board_result = '1/2-1/2' if self.rules.draw?(@turn)
     end
     
     def opponent(color)
