@@ -1,6 +1,6 @@
 
 require 'passant/board'
-require 'passant/pgn_tags'
+require 'passant/pgn'
 
 module Passant
   
@@ -10,7 +10,7 @@ module Passant
     class GameOver < Board::Exception; end
     
     attr_reader :turn
-    include PGNTags
+    include PGN::Support
     
     def initialize
       super(Board::InitialPosition)
@@ -79,7 +79,6 @@ module Passant
       self.result = '1/2-1/2' if self.rules.draw?(@turn)
     end
     
-    # TODO: refactor
     def opponent(color)
       color = (color == :white ? :black : :white)
     end
