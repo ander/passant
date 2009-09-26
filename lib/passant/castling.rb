@@ -41,7 +41,7 @@ module Passant
     end
     
     def to_s
-      @to[0] == 2 ? '0-0-0' : '0-0'
+      @to[0] == 2 ? 'O-O-O' : 'O-O'
     end
 
     def participants; [@piece, @rook].compact end
