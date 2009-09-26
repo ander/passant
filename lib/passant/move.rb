@@ -8,8 +8,10 @@ module Passant
 
   class Move
     attr_reader :piece, :from, :to
-  
+    attr_accessor :comments
+    
     def initialize(piece, move_to)
+      @comments = nil
       @piece = piece
       @from = piece.position
       @to = move_to
