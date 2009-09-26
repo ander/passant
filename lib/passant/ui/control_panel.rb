@@ -1,19 +1,14 @@
 module Passant::UI
   class ControlPanel < Wx::Panel
-    def initialize(parent, board_panel)
+    def initialize(parent)
       super(parent)
-      @board_panel = board_panel
       
       take_back_b = Wx::Button.new(self, Wx::ID_ANY, '<')
       undo_takeback_b = Wx::Button.new(self, Wx::ID_ANY, '>')
-      @event_text = Wx::StaticText.new(self,
-                                       :label => @board_panel.board.event)
 
       sizer = Wx::BoxSizer.new(Wx::HORIZONTAL)
       sizer.add(take_back_b)
       sizer.add(undo_takeback_b)
-      sizer.add_spacer(10)
-      sizer.add(@event_text)
       
       set_sizer(sizer)
       
@@ -25,7 +20,7 @@ module Passant::UI
 
     
     def take_back
-      mv = @board_panel.board.take_back
+      mv = parent.board.take_back
       if mv
         mv.draw
         parent.set_status("Took back #{mv}.")
@@ -34,7 +29,7 @@ module Passant::UI
 
     def undo_takeback
       mv = Wx::get_app.responsively do
-        @board_panel.board.undo_takeback
+        parent.board.undo_takeback
       end
       
       if mv

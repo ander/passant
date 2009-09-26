@@ -1,6 +1,6 @@
 require 'passant/ui/board_panel'
 require 'passant/ui/control_panel'
-require 'passant/ui/common'
+require 'passant/ui/info_frame'
 
 module Passant::UI
   
@@ -9,19 +9,20 @@ module Passant::UI
       super(nil, 
             :title => "Passant", 
             :pos => [150, 25], 
-            :size => [480, 571],
+            :size => [480, 575],
             :style => Wx::MINIMIZE_BOX|Wx::MAXIMIZE_BOX|Wx::SYSTEM_MENU|\
                       Wx::CAPTION|Wx::CLOSE_BOX|Wx::CLIP_CHILDREN)
       
       sizer = Wx::BoxSizer.new(Wx::VERTICAL)
       @board_panel = BoardPanel.new(self)
-      control_panel = ControlPanel.new(self, @board_panel)
-      @status_bar = Wx::StatusBar.new(self)
+      control_panel = ControlPanel.new(self)
+      @status_bar = self.create_status_bar
+
       @gauge = Wx::Gauge.new(self,
                              :size => [480,20],
                              :range => 10)
       
-      [@board_panel, @gauge, control_panel, @status_bar].each do |item| 
+      [@board_panel, @gauge, control_panel].each do |item| 
         sizer.add(item)
       end
       
@@ -35,7 +36,6 @@ module Passant::UI
       
       board_menu = Wx::Menu.new
       info_item = board_menu.append('Info', 'Info')
-      notes_item = board_menu.append('Notes', 'Notes')
       reset_board_item = board_menu.append('Reset', 'Reset board.')
       scrap_board_item = board_menu.append('Scrap', 'Scrap board.')
       
@@ -43,8 +43,7 @@ module Passant::UI
       
       evt_menu Wx::ID_OPEN, :not_implemented
       evt_menu Wx::ID_SAVE, :not_implemented
-      evt_menu info_item, :not_implemented
-      evt_menu notes_item, :not_implemented
+      evt_menu info_item, :show_info_frame
       evt_menu scrap_board_item, :not_implemented
 
       self.menu_bar.append(file_menu,  'File')
@@ -59,13 +58,21 @@ module Passant::UI
                                 Wx::OK)
       d.show_modal
     end
-
+    
+    def show_info_frame
+      @info_frame = InfoFrame.new(self)
+    end
+    
     def reset_board
-      @board_panel.board.reset
+      board.reset
       @board_panel.paint_board
       set_status('Board reset.')
     end
-    
+
+    def board
+      @board_panel.board
+    end
+
     def set_status(str)
       @status_bar.set_status_text(str)
     end
