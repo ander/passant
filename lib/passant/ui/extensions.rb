@@ -50,7 +50,9 @@ module Passant
     
     def draw(dc)
       return unless self.active?
-      y = ((7 - self.y)*60) + 5
+      flipped = self.board.ui.flipped?
+      
+      y = ((flipped ? self.y : (7 - self.y))*60) + 5
       x = (self.x * 60) + 10
       dc.draw_bitmap(@bitmap, x, y, true)
     end

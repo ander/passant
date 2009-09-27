@@ -16,9 +16,17 @@ module Passant::UI
       set_board Passant::GameBoard.new
       @white = Passant::UI.bitmapify('white_square.png')
       @black = Passant::UI.bitmapify('black_square.png')
+      @flipped = false
       show
     end
     
+    def flipped?; @flipped end
+
+    def flip_board
+      @flipped = !@flipped
+      paint_board
+    end
+
     def set_board(board)
       @board = board
       @board.ui = self
@@ -26,7 +34,7 @@ module Passant::UI
     
     def draw_square(pos, dc)
       x = pos[0]
-      y = 7 - pos[1]
+      y = flipped? ? pos[1] : 7 - pos[1]
       square = (x+y) % 2 == 0 ? @white : @black
 
       dc.draw_bitmap(square, x*60, y*60, true)
@@ -47,7 +55,7 @@ module Passant::UI
 
     def pos_for_point(point)
       x = point.x / 60
-      y = 7 - (point.y / 60)
+      y = flipped? ? (point.y / 60) : (7 - (point.y / 60))
       [x,y]
     end
 

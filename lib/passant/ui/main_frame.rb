@@ -35,15 +35,16 @@ module Passant::UI
       file_menu.append(Wx::ID_SAVE, '&Save PGN', 'Save as PGN file')
       
       board_menu = Wx::Menu.new
+      flip_item = board_menu.append('Flip', 'Flip board.')
       info_item = board_menu.append('Info', 'Info')
       reset_board_item = board_menu.append('Reset', 'Reset board.')
       scrap_board_item = board_menu.append('Scrap', 'Scrap board.')
       
-      evt_menu reset_board_item, :reset_board
-      
       evt_menu Wx::ID_OPEN, :not_implemented
       evt_menu Wx::ID_SAVE, :not_implemented
+      evt_menu flip_item, :flip_board
       evt_menu info_item, :show_info_frame
+      evt_menu reset_board_item, :reset_board
       evt_menu scrap_board_item, :not_implemented
 
       self.menu_bar.append(file_menu,  'File')
@@ -51,22 +52,6 @@ module Passant::UI
 
       show
       set_status("Welcome.")
-    end
-    
-    def not_implemented
-      d = Wx::MessageDialog.new(self,  'Not implemented.', "Not Implemented", 
-                                Wx::OK)
-      d.show_modal
-    end
-    
-    def show_info_frame
-      @info_frame = InfoFrame.new(self)
-    end
-    
-    def reset_board
-      board.reset
-      @board_panel.paint_board
-      set_status('Board reset.')
     end
 
     def board
@@ -86,6 +71,27 @@ module Passant::UI
       @gauge.set_value(0)
     end
 
+    private
+
+    def not_implemented
+      d = Wx::MessageDialog.new(self,  'Not implemented.', "Not Implemented", 
+                                Wx::OK)
+      d.show_modal
+    end
+
+    def flip_board
+      @board_panel.flip_board
+    end
+
+    def show_info_frame
+      @info_frame = InfoFrame.new(self)
+    end
+    
+    def reset_board
+      board.reset
+      @board_panel.paint_board
+      set_status('Board reset.')
+    end
   end
   
 end
