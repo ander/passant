@@ -10,7 +10,7 @@ module Passant
     class GameOver < Board::Exception; end
     
     attr_reader :turn
-    include PGN::Support
+    include Passant::PGN::Support
     
     def initialize
       super(Board::InitialPosition)
@@ -31,15 +31,19 @@ module Passant
     end
     
     # can also be called after the game is over
-    def move(from, to)
+    def move(from, to=nil)
       raise_if_result
-      piece = self.at(from)
       
-      if piece and piece.color != @turn
-        raise Board::InvalidMove.new("#{@turn.to_s.capitalize}'s turn!")
+      if !to.nil? # TODO: do this in Move.parse
+        piece = self.at(from)
+      
+        if piece and piece.color != @turn
+          raise Board::Exception.new("#{@turn.to_s.capitalize}'s turn!")
+        end
       end
       
-      mv = super
+      mv = Move.parse(self, @turn, from, to)
+      mv.apply
       
       @turn = opponent(@turn)
       update_result
@@ -81,10 +85,6 @@ module Passant
         @board_result = (@turn == :black ? '1-0' : '0-1') 
       end
       @board_result = '1/2-1/2' if self.rules.draw?(@turn)
-    end
-    
-    def opponent(color)
-      color = (color == :white ? :black : :white)
     end
     
   end

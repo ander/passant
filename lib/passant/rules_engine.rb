@@ -16,8 +16,11 @@ module Passant
     def valid_move?(move, can_capture=true, recurse=true)
       return false if (recurse and ignores_or_causes_self_check?(move))
       content = @board.at(move.to)
-      return true unless content
-      return (move.piece.enemy?(content) and can_capture)
+      unless content
+        true
+      else
+        move.piece.enemy?(content) and can_capture
+      end
     end
     
     # check also the squares in between for blockers

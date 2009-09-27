@@ -11,15 +11,16 @@ module Passant::UI
                      parent.position.y],
             :size => [300, 200])
       sizer = Wx::BoxSizer.new(Wx::VERTICAL)
+      tag_pairs = parent.board.tag_pairs
+      
       @grid = Wx::Grid.new(self)
-      tags = parent.board.tags
-      @grid.create_grid(tags.size,1)
+      @grid.create_grid(tag_pairs.size,1)
       @grid.col_label_size = 0
       @grid.set_col_size(0, 150)
       @grid.enable_drag_grid_size(false)
       @grid.enable_drag_row_size(false)
       
-      tags.each_with_index do |t,i| 
+      tag_pairs.each_with_index do |t,i| 
         @grid.set_row_label_value(i, t.key)
         @grid.set_cell_value(i, 0, t.value)
       end

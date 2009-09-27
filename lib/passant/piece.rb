@@ -32,9 +32,13 @@ module Passant
     
     # return true if this piece has been moved
     def moved?; !@history.empty?; end
-    
-    def advance_direction
+
+    def self.advance_direction(color)
       color == :white ? 1 : -1
+    end
+
+    def advance_direction
+      self.class.advance_direction(color)
     end
     
     def white?; color == :white; end

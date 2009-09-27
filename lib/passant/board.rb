@@ -14,7 +14,6 @@ module Passant
   # Basic chess board.
   class Board
     class Exception < StandardError; end
-    class InvalidMove < Board::Exception; end
     
     PieceLetterMap = { Pawn   => ['P','p'],
                        Rook   => ['R','r'],
@@ -44,15 +43,16 @@ module Passant
     def self.new_empty
       Board.new(['.'*8]*8)
     end
-
-    # The method to call to move a piece
-    def move(from, to)
-      piece = self.at(from)
-      mv = piece ? piece.moves.detect{|m| m.to == to} : nil
-      raise InvalidMove.new('Invalid move') unless mv
-      mv.apply
+    
+    # The method to call to move a piece.
+    # move parsing needs a color if 'to' is not provided,
+    # so we have to guess the turn belongs to opponent of last move or white.
+    # (Board is not turn based, see GameBoard)
+    def move(from, to=nil)
+      color = history.last.nil? ? :white : opponent(history.last.piece.color)
+      Move.parse(self, color, from, to).apply
     end
-
+    
     def add_piece(piece)
       @pieces << piece
     end
@@ -150,7 +150,11 @@ module Passant
     def inspect; "\n"+self.to_s; end
 
     private
-  
+
+    def opponent(color)
+      color = (color == :white ? :black : :white)
+    end
+
     def new_piece_by_letter(letter, pos)
       pl = PieceLetterMap.detect{|k,v| v.include?(letter)}
       raise "Invalid letter: #{letter}" unless pl

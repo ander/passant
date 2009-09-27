@@ -38,14 +38,12 @@ module Passant::UI
       flip_item = board_menu.append('Flip', 'Flip board.')
       info_item = board_menu.append('Info', 'Info')
       reset_board_item = board_menu.append('Reset', 'Reset board.')
-      scrap_board_item = board_menu.append('Scrap', 'Scrap board.')
       
       evt_menu Wx::ID_OPEN, :not_implemented
       evt_menu Wx::ID_SAVE, :not_implemented
       evt_menu flip_item, :flip_board
       evt_menu info_item, :show_info_frame
       evt_menu reset_board_item, :reset_board
-      evt_menu scrap_board_item, :not_implemented
 
       self.menu_bar.append(file_menu,  'File')
       self.menu_bar.append(board_menu, 'Board')
