@@ -139,7 +139,7 @@ module Passant
         mv = piece ? piece.moves.detect{|m| m.to == to} : nil
       end
       
-      raise Invalid.new('Invalid move') unless mv
+      raise Invalid.new("Invalid move (#{from.inspect}, #{to.inspect})") unless mv
       mv
     end
 

@@ -79,7 +79,7 @@ module Passant
         @board.at([1, row]).nil? and \
         @board.at([2, row]).nil? and \
         @board.at([3, row]).nil? and \
-        (@board.all_moves(king.enemy_color, false).\
+        (@board.all_moves(king.enemy_color, false, false).\
          map{|m| m.to} & [[2,row],[3,row],[4,row]]).empty?
         moves << Castling.new(king, [2,row])
       end
@@ -90,7 +90,7 @@ module Passant
         !rook.moved? and \
         @board.at([5,row]).nil? and \
         @board.at([6,row]).nil? and \
-        (@board.all_moves(king.enemy_color, false).\
+        (@board.all_moves(king.enemy_color, false, false).\
          map{|m| m.to} & [[5,row],[6,row]]).empty?
         moves << Castling.new(king, [6,row])
       end

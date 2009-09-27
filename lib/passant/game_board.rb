@@ -81,10 +81,10 @@ module Passant
     end
     
     def update_result
-      if self.rules.checkmate?(@turn) 
-        @board_result = (@turn == :black ? '1-0' : '0-1') 
-      end
-      @board_result = '1/2-1/2' if self.rules.draw?(@turn)
+      #if self.rules.checkmate?(@turn) 
+      #  @board_result = (@turn == :black ? '1-0' : '0-1') 
+      #end
+      #@board_result = '1/2-1/2' if self.rules.draw?(@turn)
     end
     
   end

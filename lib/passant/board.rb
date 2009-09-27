@@ -33,7 +33,7 @@ module Passant
                         'RNBQKBNR'  ]
   
     attr_reader :pieces, :rules, :history, :takebacks
-
+    
     def initialize(position=InitialPosition)
       @rules = RulesEngine.new(self)
       @takebacks = []
@@ -106,10 +106,14 @@ module Passant
   
     def to_s; to_a.reverse.join("\n"); end
 
-    def all_moves(color, recurse=true)
+    def all_moves(color, recurse=true, include_castlings=true)
       mvs = []
       @pieces.select{|p| p.color == color}.each do |p|
-        mvs << p.moves(recurse)
+        if !include_castlings and p.class == King
+          mvs << p.moves(recurse, false)
+        else
+          mvs << p.moves(recurse)
+        end
       end
       mvs.flatten
     end
