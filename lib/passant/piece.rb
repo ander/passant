@@ -57,9 +57,9 @@ module Passant
       mvs = []
       dirs.each do |dir|
         mv = Move.new(self, [@position[0]+dir[0], @position[1]+dir[1]])
-        while !@board.off_limits?(mv.to) and \
-          @board.rules.valid_linear_move?(mv, can_capture, recurse)
-          mvs << mv
+        while !@board.off_limits?(mv.to)
+          mvs << mv if @board.rules.valid_linear_move?(mv, can_capture, recurse)
+          break unless @board.at(mv.to).nil?
           mv = Move.new(self, [mv.to[0]+dir[0], mv.to[1]+dir[1]])
         end
       end

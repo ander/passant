@@ -43,7 +43,9 @@ module Passant
           parts = md.split
           board.move(parts[0])
           # TODO: handle comments
-          board.move(parts[1]) if parts[1]
+          if parts[1] and !%w(0-1 1-0 1/2-1/2).include?(parts[1])
+            board.move(parts[1])
+          end
         end
         board
       end

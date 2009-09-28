@@ -81,6 +81,18 @@ describe Passant::RulesEngine do
     bishop = board.at(c2)
     (bishop.moves.map{|m| m.to} | [b1, d1]).size.should == 2
   end
+
+  it "should allow to capture the checking piece" do
+    board = Passant::Board.new(['r..R...k',
+                                'pp....bp',
+                                '..p...b.',
+                                '..B.r.p.',
+                                '..B.....',
+                                '.......P',
+                                'PPP.....',
+                                '...R..K.'])
+    Passant::Move.parse(board, :black, 'Rxd8')
+  end
   
   it "should recognize draw" do
     board = Passant::Board.new(
@@ -108,7 +120,7 @@ describe Passant::RulesEngine do
     board.rules.checkmate?(:white).should == true
   end
 
-  it "should allow long castling" do
+  it "should allow queen-side castling" do
     board = Passant::Board.new(
               [ '........',
                 '........',
@@ -124,7 +136,7 @@ describe Passant::RulesEngine do
     c.first.to.should == c1
   end
 
-  it "should allow short castling" do
+  it "should allow king-side castling" do
     board = Passant::Board.new(
               [ '........',
                 '........',
@@ -139,6 +151,5 @@ describe Passant::RulesEngine do
     c.size.should == 1
     c.first.to.should == g1
   end
-  
 
 end
