@@ -112,13 +112,14 @@ module Passant::UI
         else
           choice = Wx::SingleChoiceDialog.new(self, 'Select game', 
                      'Select game', games.map{|g| g.title})
-          choice.show_modal
-          idx = choice.get_selection
-          selected = games[idx] if idx
+          
+          if choice.show_modal == Wx::ID_OK
+            idx = choice.get_selection
+            selected = games[idx] if idx
+          end
         end
         
         Wx::get_app.responsively { selected.to_board(board) } if selected
-
       end
     end
   end

@@ -57,11 +57,11 @@ module Passant
       
       def set_title
         title_parts = []
-        [2,0,4,5].each do |tp_i|
+        [2,0,4,5,6].each do |tp_i|
           @tag_pairs[tp_i] =~ /\"(.*)\"/
           title_parts << $1
         end
-        @title = title_parts.join(' ')
+        @title = title_parts.join(' | ')
       end
     end
     
