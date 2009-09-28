@@ -22,8 +22,8 @@ module Passant::UI
     def take_back
       mv = parent.board.take_back
       if mv
-        mv.draw
         parent.set_status("Took back #{mv}.")
+        mv.piece.board.ui.refresh
       end
     end
 
@@ -33,8 +33,8 @@ module Passant::UI
       end
       
       if mv
-        mv.draw
-        parent.set_status(mv.to_s)
+        parent.set_status(mv.to_s) 
+        mv.piece.board.ui.refresh
       end
     end
   end
