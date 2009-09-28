@@ -17,7 +17,14 @@ module Passant
       add_piece_without_ui(piece)
       piece.initialize_ui(@ui) if @ui
     end
-    
+
+    alias_method :move_without_ui, :move
+    def move(from, to=nil)
+      mv = move_without_ui(from, to)
+      mv.draw
+      mv
+    end
+
   end
   
   class Move

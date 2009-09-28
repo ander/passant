@@ -20,7 +20,7 @@ module Passant::UI
         begin
           result = yield
           Thread.exit
-        rescue Passant::Board::Exception => e
+        rescue Passant::Board::Exception, Passant::Move::Invalid => e
           @main.set_status(e.message)
         end
       end

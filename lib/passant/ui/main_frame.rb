@@ -39,7 +39,7 @@ module Passant::UI
       info_item = board_menu.append('Info', 'Info')
       reset_board_item = board_menu.append('Reset', 'Reset board.')
       
-      evt_menu Wx::ID_OPEN, :not_implemented
+      evt_menu Wx::ID_OPEN, :open_pgn
       evt_menu Wx::ID_SAVE, :not_implemented
       evt_menu flip_item, :flip_board
       evt_menu info_item, :show_info_frame
@@ -62,6 +62,7 @@ module Passant::UI
 
     def pulse
       @gauge.pulse
+      @board_panel.refresh
       Wx::get_app.yield
     end
 
@@ -89,6 +90,36 @@ module Passant::UI
       board.reset
       @board_panel.paint_board
       set_status('Board reset.')
+    end
+
+    def open_pgn
+      dialog = Wx::FileDialog.new(self, "Choose a PGN file", '', '', 
+                                  'PGN Files (*.PGN;*.pgn)|*.PGN;*.pgn')
+      if dialog.show_modal == Wx::ID_OK and path = dialog.get_path
+        
+        pgn = Passant::PGN::File.new(path)
+
+        games = []
+        selected = nil
+        
+        Wx::get_app.responsively { games = pgn.games }
+        
+        if games.size == 0
+          set_status('No games in pgn.')
+          return
+        elsif games.size == 1
+          selected = games.first
+        else
+          choice = Wx::SingleChoiceDialog.new(self, 'Select game', 
+                     'Select game', games.map{|g| g.title})
+          choice.show_modal
+          idx = choice.get_selection
+          selected = games[idx] if idx
+        end
+        
+        Wx::get_app.responsively { selected.to_board(board) } if selected
+
+      end
     end
   end
   

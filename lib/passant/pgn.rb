@@ -27,12 +27,15 @@ module Passant
 
     # Reflects a single PGN game that converts to a GameBoard
     class Game
+      attr_reader :title
+      
       def initialize(tag_pairs, movetext)
         @tag_pairs, @movetext = tag_pairs, movetext
+        set_title
       end
       
-      def to_board
-        board = GameBoard.new
+      def to_board(board=nil)
+        board ||= GameBoard.new
         board.tag_pairs = @tag_pairs.map do |tp|
           tp =~ /^\[([^\s]+)\s+"(.+)"\]$/
           TagPair.new($1,$2)
@@ -48,6 +51,17 @@ module Passant
           end
         end
         board
+      end
+      
+      private
+      
+      def set_title
+        title_parts = []
+        [2,0,4,5].each do |tp_i|
+          @tag_pairs[tp_i] =~ /\"(.*)\"/
+          title_parts << $1
+        end
+        @title = title_parts.join(' ')
       end
     end
     
@@ -73,7 +87,7 @@ module Passant
             elsif line.length == 0
               if tag_pairs.length > 0 and movetext.length > 0
                 games << Game.new(tag_pairs, movetext)
-                tag_pairs = ''
+                tag_pairs = []
                 movetext = ''
               end
             else

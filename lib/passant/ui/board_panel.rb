@@ -74,8 +74,6 @@ module Passant::UI
           mv = @board.move(@from, to)
           parent.set_status(mv.to_s)
         end
-        
-        @board.history.last.draw unless @board.history.empty?
       end
       
       @from = nil
