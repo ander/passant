@@ -32,6 +32,7 @@ module Passant
       super
       @rook.position = @rook_to
       @rook.history << self
+      self
     end
 
     def take_back
