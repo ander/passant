@@ -38,6 +38,7 @@ module Passant
       super
       @rook.position = @rook_from
       @rook.history.delete(self)
+      self
     end
     
     def to_s
