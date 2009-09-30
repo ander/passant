@@ -10,7 +10,8 @@ module Passant
       attr_reader :key
       
       def initialize(key, value)
-        @key, @value = key, value
+        @key = key || ''
+        @value = value || ''
       end
       
       def self.required
