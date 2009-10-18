@@ -62,7 +62,8 @@ module Passant
     # exd5   : e-row pawn captures d5. just 'xd5' not allowed.
     # Nxd5   : knight captures d5
     # e2e4   : move using just square coordinates
-    # Nexc4  : knight from e-row captures c4
+    # Nexc4  : knight from e-column captures c4
+    # N2xc4  : knight from row 2 captures c4
     # O-O-O  : castling, queen-side
     # Ne2c3  : knight from e2 to c3
     # Ne2xc3 : knight from e2 captures c3
@@ -114,10 +115,16 @@ module Passant
           
           if c == c.capitalize
             klass = Board::PieceLetterMap.detect{|k,v| v.include?(c)}[0]
-            x_diff = str[1] - str[2]
+            x_diff = nil
+            y_pos = nil
+            if str[1,1] <= '9'
+              y_pos = str[1,1].to_i - 1
+            else
+              x_diff = str[1] - str[2]
+            end
             piece = board.pieces.detect do |p|
               p.class == klass and p.color == color and \
-                p.x == move_to[0] + x_diff
+                (x_diff ? p.x == move_to[0] + x_diff : p.y == y_pos)
             end
             mv = piece ? piece.moves.detect{|m| m.to == move_to} : nil
           else

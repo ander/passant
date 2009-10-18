@@ -193,6 +193,7 @@ describe Passant::GameBoard do
       b.move('c6')
       b.move('exd5')
       b.move('a6')
+      # two white pawns in the same column, only the other one can capture
       b.should == Passant::Board.new([ 'rnbqkbnr',
                                        '.p..pppp',
                                        'p.p.....',
@@ -202,6 +203,25 @@ describe Passant::GameBoard do
                                        'PPP..PPP',
                                        'RNBQKBNR' ])
       b.move('dxc6')
+    end
+
+    it "should parse moves correctly (10)" do
+      b = Passant::GameBoard.new
+      b.move('d3');  b.move('d6')
+      b.move('Nf3'); b.move('b6')
+      b.move('Nd4'); b.move('Bb7')
+      b.move('Nd2'); b.move('Bf3')
+      
+      # two knights in the same column can capture bishop
+      b.should == Passant::Board.new(['rn.qkbnr',
+                                      'p.p.pppp',
+                                      '.p.p....',
+                                      '........',
+                                      '...N....',
+                                      '...P.b..',
+                                      'PPPNPPPP',
+                                      'R.BQKB.R' ])
+      b.move('N2xf3')
     end
     
   end
