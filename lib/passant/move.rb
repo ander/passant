@@ -98,11 +98,13 @@ module Passant
               mv = moves.detect{|m| m.to == move_to}
             elsif capture
               x_diff = str[0,1] > str[1,1] ? 1 : -1
+              
               piece = board.pieces.detect do |p| 
                 p.class == Pawn and p.color == color and \
-                  p.position[0] == move_to[0] + x_diff
+                  p.x == move_to[0] + x_diff
               end
-              mv = piece ? piece.moves.detect{|m| m.to == move_to} : nil 
+              
+              mv = piece ? piece.moves.detect{|m| [move_to, [move_to[0], move_to[1]+piece.advance_direction]].include?(m.to)} : nil 
             end
           end
           
@@ -115,7 +117,7 @@ module Passant
             x_diff = str[1] - str[2]
             piece = board.pieces.detect do |p|
               p.class == klass and p.color == color and \
-                p.position[0] == move_to[0] + x_diff
+                p.x == move_to[0] + x_diff
             end
             mv = piece ? piece.moves.detect{|m| m.to == move_to} : nil
           else

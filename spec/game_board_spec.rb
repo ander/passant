@@ -160,6 +160,31 @@ describe Passant::GameBoard do
                                        'RNBQKB.R'  ])
     end
 
+    it "should parse moves correctly (8)" do
+      b = Passant::GameBoard.new
+      b.move('e4')
+      b.move('a6')
+      b.move('e5')
+      b.move('d5')
+      b.should == Passant::Board.new([ 'rnbqkbnr',
+                                       '.pp.pppp',
+                                       'p.......',
+                                       '...pP...',
+                                       '........',
+                                       '........',
+                                       'PPPP.PPP',
+                                       'RNBQKBNR' ])
+      b.move('exd5')
+      b.should == Passant::Board.new([ 'rnbqkbnr',
+                                       '.pp.pppp',
+                                       'p..P....',
+                                       '........',
+                                       '........',
+                                       '........',
+                                       'PPPP.PPP',
+                                       'RNBQKBNR' ])
+    end
+
   end
   
 end
