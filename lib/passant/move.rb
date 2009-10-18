@@ -99,12 +99,12 @@ module Passant
             elsif capture
               x_diff = str[0,1] > str[1,1] ? 1 : -1
               
-              piece = board.pieces.detect do |p| 
+              pieces = board.pieces.select do |p| 
                 p.class == Pawn and p.color == color and \
                   p.x == move_to[0] + x_diff
               end
               
-              mv = piece ? piece.moves.detect{|m| [move_to, [move_to[0], move_to[1]+piece.advance_direction]].include?(m.to)} : nil 
+              mv = pieces.map{|p| p.moves}.flatten.detect{|m| [move_to, [move_to[0], move_to[1]+m.piece.advance_direction]].include?(m.to)}
             end
           end
           
