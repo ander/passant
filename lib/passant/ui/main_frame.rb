@@ -95,6 +95,7 @@ module Passant::UI
     def open_pgn
       dialog = Wx::FileDialog.new(self, "Choose a PGN file", '', '', 
                                   'PGN Files (*.PGN;*.pgn)|*.PGN;*.pgn')
+      
       if dialog.show_modal == Wx::ID_OK and path = dialog.get_path
         
         pgn = Passant::PGN::File.new(path)
@@ -119,7 +120,10 @@ module Passant::UI
           end
         end
         
-        Wx::get_app.responsively { selected.to_board(board) } if selected
+        if selected
+          reset_board
+          Wx::get_app.responsively { selected.to_board(board) }
+        end
       end
     end
   end

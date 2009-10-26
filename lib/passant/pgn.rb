@@ -15,7 +15,7 @@ module Passant
       end
       
       def self.required
-        [ TagPair.new('Event',  'a new game'),
+        [ TagPair.new('Event',  'casual game'),
           TagPair.new('Site',   '?'),
           TagPair.new('Date',   Date.today.strftime('%Y.%m.%d')),
           TagPair.new('Round',  '?'),

@@ -71,8 +71,12 @@ module Passant::UI
       if !to.nil?
         self.disable
         Wx::get_app.responsively do
-          mv = @board.move(@from, to)
-          parent.set_status(mv.to_s)
+          begin
+            mv = @board.move(@from, to)
+            parent.set_status(mv.to_s)
+          rescue Passant::Move::Invalid, Passant::Board::Exception => e
+            parent.set_status(e.message)
+          end
         end
       end
       
