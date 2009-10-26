@@ -6,6 +6,7 @@ require 'passant/ui/common'
 module Passant::UI
   class BoardPanel < Wx::Panel
     attr_accessor :board
+    attr_reader :pending
     
     def initialize(parent)
       super(parent, :size => [480,480])
@@ -17,6 +18,7 @@ module Passant::UI
       @white = Passant::UI.bitmapify('white_square.png')
       @black = Passant::UI.bitmapify('black_square.png')
       @flipped = false
+      @pending = []
       show
     end
     
@@ -50,7 +52,13 @@ module Passant::UI
         @board.pieces.each {|p| p.draw(dc) }
       end
     end
-
+    
+    def draw_pending
+      while pending_draw = @pending.pop
+        pending_draw.call
+      end
+    end
+    
     private
 
     def pos_for_point(point)
@@ -66,22 +74,23 @@ module Passant::UI
     
     def release_piece(mouse_event)
       return unless @from
-      to = pos_for_point(mouse_event.get_position)
       
-      if !to.nil?
-        self.disable
-        Wx::get_app.responsively do
-          begin
-            mv = @board.move(@from, to)
-            parent.set_status(mv.to_s)
-          rescue Passant::Move::Invalid, Passant::Board::Exception => e
-            parent.set_status(e.message)
-          end
+      Wx::get_app.responsively do
+        begin
+          to = pos_for_point(mouse_event.get_position)
+          self.disable
+          mv = @board.move(@from, to)
+          parent.set_status(mv.to_s)
+          
+        rescue Passant::Move::Invalid, Passant::Board::Exception,\
+               Passant::GameBoard::GameOver => e
+          parent.set_status(e.message)
+        
+        ensure  
+          @from = nil
+          self.enable
         end
       end
-      
-      @from = nil
-      self.enable
     end
     
   end

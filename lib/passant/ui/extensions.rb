@@ -4,7 +4,7 @@ require 'passant/ui/common'
 
 module Passant
 
-  class Board
+  class GameBoard
     def ui=(ui)
       @ui = ui
       pieces.each{|p| p.initialize_ui(@ui)}
@@ -21,17 +21,17 @@ module Passant
     alias_method :move_without_ui, :move
     def move(from, to=nil)
       mv = move_without_ui(from, to)
-      mv.draw
+      @ui.pending << lambda{ mv.draw }
       mv
     end
-
+    
   end
   
   class Move
     def draw
       return unless ui = @piece.board.ui
       
-      ui.paint do |dc|
+      ui.paint_buffered do |dc|
         ui.draw_square(from, dc)
         ui.draw_square(to, dc)
         

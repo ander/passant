@@ -16,7 +16,7 @@ module Passant::UI
       sizer = Wx::BoxSizer.new(Wx::VERTICAL)
       @board_panel = BoardPanel.new(self)
       control_panel = ControlPanel.new(self)
-      @status_bar = self.create_status_bar
+      self.status_bar = Wx::StatusBar.new(self)
 
       @gauge = Wx::Gauge.new(self,
                              :size => [480,20],
@@ -57,13 +57,13 @@ module Passant::UI
     end
 
     def set_status(str)
-      @status_bar.set_status_text(str)
+      self.status_bar.set_status_text(str)
     end
 
     def pulse
       @gauge.pulse
-      @board_panel.refresh
-      Wx::get_app.yield
+      @board_panel.draw_pending
+      Wx::get_app.yield(true)
     end
 
     def ready

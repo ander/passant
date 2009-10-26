@@ -17,17 +17,13 @@ module Passant::UI
       result = nil
       
       t = Thread.new do
-        begin
-          result = yield
-          Thread.exit
-        rescue Passant::Board::Exception, Passant::Move::Invalid => e
-          @main.set_status(e.message)
-        end
+        result = yield
+        Thread.exit
       end
       
       while t.alive?
         @main.pulse
-        sleep(0.1)
+        sleep(0.10)
       end
       
       @main.ready
