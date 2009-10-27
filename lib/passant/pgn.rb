@@ -4,7 +4,8 @@ require 'date'
 module Passant
   
   module PGN
-    
+
+    # A PGN tagpair
     class TagPair
       attr_accessor :value
       attr_reader :key

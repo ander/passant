@@ -1,11 +1,7 @@
-=begin rdoc
-
-En passant.
-
-=end
 
 module Passant
-
+  
+  # En passant.
   class EnPassant < Move
   
     def initialize(pawn, to)

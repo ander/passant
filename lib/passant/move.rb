@@ -1,11 +1,7 @@
-=begin rdoc
-
-Move of a piece.
-
-=end
 
 module Passant
   
+  # Move of a piece.
   class Move
     class Invalid < StandardError; end
     
@@ -148,10 +144,18 @@ module Passant
         mv = piece ? piece.moves.detect{|m| m.to == to} : nil
       end
       
-      raise Invalid.new("Invalid move (#{from.inspect}, #{to.inspect})") unless mv
+      unless mv
+        unless to.nil?
+          msg = "Invalid move: #{chess_coords(from)}#{chess_coords(to)}"
+        else
+          msg = "Invalid move: #{from}"
+        end  
+        raise Invalid.new(msg)
+      end
+      
       mv
     end
-
-  end
+  
+  end # class Move
 
 end

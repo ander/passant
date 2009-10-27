@@ -1,10 +1,7 @@
-=begin rdoc
-
-Pawn promotion.
-
-=end
 
 module Passant
+  
+  # Pawn promotion.
   class Promotion < Move
     def initialize(piece, move_to)
       super

@@ -1,10 +1,7 @@
-=begin rdoc
 
-Contains most of the rules logic.
-
-=end
 module Passant
-
+  
+  # Contains most of the rules logic.
   class RulesEngine
     def initialize(board)
       @board = board

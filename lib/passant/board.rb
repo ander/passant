@@ -119,7 +119,7 @@ module Passant
     end
 
     def after_move(move)
-      raise "Invalid piece!" unless @pieces.include?(move.piece)
+      raise Board::Exception.new("Invalid piece!") unless @pieces.include?(move.piece)
       new_board = Board.new(self.to_a.reverse)
       new_move = move.class.new(new_board.at(move.from), move.to)
       new_move.apply

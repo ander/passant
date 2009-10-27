@@ -1,8 +1,3 @@
-=begin rdoc
-
-Base class for chess pieces.
-
-=end
 
 require 'passant/move'
 require 'passant/castling'
@@ -10,7 +5,8 @@ require 'passant/en_passant'
 require 'passant/promotion'
 
 module Passant
-
+  
+  # Base class for chess pieces.
   class Piece
     attr_accessor :position, :history
     attr_reader :board, :color

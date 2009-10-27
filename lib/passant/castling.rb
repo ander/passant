@@ -1,10 +1,7 @@
-=begin rdoc
-
-Castling.
-
-=end
 
 module Passant
+  
+  # Castling.
   class Castling < Move
   
     def initialize(king, to)
