@@ -33,7 +33,8 @@ module Passant::UI
       file_menu = Wx::Menu.new
       file_menu.append(Wx::ID_OPEN, '&Open PGN', 'Open a PGN file')
       file_menu.append(Wx::ID_SAVE, '&Save PGN', 'Save as PGN file')
-      
+      file_menu.append(Wx::ID_ABOUT, 'About', 'About Passant')
+
       board_menu = Wx::Menu.new
       flip_item = board_menu.append('Flip', 'Flip board.')
       info_item = board_menu.append('Info', 'Info')
@@ -41,13 +42,14 @@ module Passant::UI
       
       evt_menu Wx::ID_OPEN, :open_pgn
       evt_menu Wx::ID_SAVE, :not_implemented
+      evt_menu Wx::ID_ABOUT, :about
       evt_menu flip_item, :flip_board
       evt_menu info_item, :show_info_frame
       evt_menu reset_board_item, :reset_board
 
       self.menu_bar.append(file_menu,  'File')
       self.menu_bar.append(board_menu, 'Board')
-
+      
       show
       set_status("Welcome.")
     end
@@ -72,6 +74,15 @@ module Passant::UI
 
     private
 
+    def about
+      d = Wx::MessageDialog.new(self,  
+        "Passant, a small chesslib.\n\n"+ 
+        "Copyright 2008-2009 Antti Hakala \n"+
+        "(antti.hakala@gmail.com)\n\n"+
+        "Released under BSD-licence.", "About", Wx::OK)
+      d.show_modal
+    end
+    
     def not_implemented
       d = Wx::MessageDialog.new(self,  'Not implemented.', "Not Implemented", 
                                 Wx::OK)
