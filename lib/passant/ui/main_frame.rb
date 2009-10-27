@@ -1,6 +1,7 @@
 require 'passant/ui/board_panel'
 require 'passant/ui/control_panel'
 require 'passant/ui/info_frame'
+require 'passant/ui/open_pgn_frame'
 
 module Passant::UI
   
@@ -72,6 +73,12 @@ module Passant::UI
       @gauge.set_value(0)
     end
 
+    def reset_board
+      board.reset
+      @board_panel.paint_board
+      set_status('Board reset.')
+    end
+    
     private
 
     def about
@@ -94,48 +101,13 @@ module Passant::UI
     end
 
     def show_info_frame
-      @info_frame = InfoFrame.new(self)
-    end
-    
-    def reset_board
-      board.reset
-      @board_panel.paint_board
-      set_status('Board reset.')
+      @info_frame ||= InfoFrame.new(self)
+      @info_frame.show
     end
 
     def open_pgn
-      dialog = Wx::FileDialog.new(self, "Choose a PGN file", '', '', 
-                                  'PGN Files (*.PGN;*.pgn)|*.PGN;*.pgn')
-      
-      if dialog.show_modal == Wx::ID_OK and path = dialog.get_path
-        
-        pgn = Passant::PGN::File.new(path)
-
-        games = []
-        selected = nil
-        
-        Wx::get_app.responsively { games = pgn.games }
-        
-        if games.size == 0
-          set_status('No games in pgn.')
-          return
-        elsif games.size == 1
-          selected = games.first
-        else
-          choice = Wx::SingleChoiceDialog.new(self, 'Select game', 
-                     'Select game', games.map{|g| g.title})
-          
-          if choice.show_modal == Wx::ID_OK
-            idx = choice.get_selection
-            selected = games[idx] if idx
-          end
-        end
-        
-        if selected
-          reset_board
-          Wx::get_app.responsively { selected.to_board(board) }
-        end
-      end
+      @game_select_frame ||= OpenPGNFrame.new(self)
+      @game_select_frame.show
     end
   end
   

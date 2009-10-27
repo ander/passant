@@ -1,12 +1,10 @@
-require 'passant/ui/board_panel'
-require 'passant/ui/control_panel'
 
 module Passant::UI
   
   class InfoFrame < Wx::Frame
     def initialize(parent)
       super(parent, 
-            :title => "Info",
+            :title => "Passant: Board Info",
             :pos => [parent.position.x + parent.size.x,
                      parent.position.y],
             :size => [300, 200])
@@ -25,11 +23,20 @@ module Passant::UI
         @grid.set_cell_value(i, 0, t.value)
       end
       
+      evt_close do |close_event| 
+        if close_event.can_veto
+          self.hide
+          close_event.veto
+        else
+          self.destroy
+        end
+      end
+      
       sizer.add(@grid, 1, Wx::GROW)
       set_sizer(sizer)
       show
     end
-
+    
   end
   
 end
