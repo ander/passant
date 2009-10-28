@@ -1,18 +1,18 @@
 
+require 'singleton'
+
 module Passant
   
   # Contains most of the rules logic.
   class RulesEngine
-    def initialize(board)
-      @board = board
-    end
+    include Singleton
 
     # check if a piece can move to a square
     # blocked if own piece in square or enemy piece and
     # can_capture == false
-    def valid_move?(move, can_capture=true, recurse=true)
-      return false if (recurse and ignores_or_causes_self_check?(move))
-      content = @board.at(move.to)
+    def valid_move?(board, move, can_capture=true, recurse=true)
+      return false if (recurse and ignores_or_causes_self_check?(board, move))
+      content = board.at(move.to)
       unless content
         true
       else
@@ -21,8 +21,8 @@ module Passant
     end
     
     # check also the squares in between for blockers
-    def valid_linear_move?(move, can_capture=true, recurse=true)
-      return false if (recurse and ignores_or_causes_self_check?(move))
+    def valid_linear_move?(board, move, can_capture=true, recurse=true)
+      return false if (recurse and ignores_or_causes_self_check?(board, move))
       piece = move.piece
       x_coords = \
         piece.x.send(piece.x < move.to[0] ? :upto : :downto, move.to[0]).map
@@ -41,7 +41,7 @@ module Passant
       squares.shift # remove the starting square
     
       squares.each_with_index do |sq,i|
-        content = @board.at(sq)
+        content = board.at(sq)
         if content
           return false if !piece.enemy?(content) or !can_capture
           return false if i < squares.size-1 # can't jump over pieces
@@ -50,8 +50,8 @@ module Passant
       return true
     end
     
-    def en_passant(pawn)
-      last_mv = @board.history.last
+    def en_passant(board, pawn)
+      last_mv = board.history.last
       if last_mv and \
         last_mv.piece.is_a?(Pawn) and \
         pawn.enemy?(last_mv.piece) and \
@@ -64,30 +64,30 @@ module Passant
       return nil
     end
     
-    def castlings(king)
+    def castlings(board, king)
       return [] if king.moved?
       moves = []
       row = (king.white? ? 0 : 7)
       
-      if (rook = @board.at([0,row])) and \
+      if (rook = board.at([0,row])) and \
         rook.is_a?(Rook) and \
         rook.color == king.color and \
         !rook.moved? and \
-        @board.at([1, row]).nil? and \
-        @board.at([2, row]).nil? and \
-        @board.at([3, row]).nil? and \
-        (@board.all_moves(king.enemy_color, false, false).\
+        board.at([1, row]).nil? and \
+        board.at([2, row]).nil? and \
+        board.at([3, row]).nil? and \
+        (board.all_moves(king.enemy_color, false, false).\
          map{|m| m.to} & [[2,row],[3,row],[4,row]]).empty?
         moves << Castling.new(king, [2,row])
       end
     
-      if (rook = @board.at([7,row])) and \
+      if (rook = board.at([7,row])) and \
         rook.is_a?(Rook) and \
         rook.color == king.color and \
         !rook.moved? and \
-        @board.at([5,row]).nil? and \
-        @board.at([6,row]).nil? and \
-        (@board.all_moves(king.enemy_color, false, false).\
+        board.at([5,row]).nil? and \
+        board.at([6,row]).nil? and \
+        (board.all_moves(king.enemy_color, false, false).\
          map{|m| m.to} & [[5,row],[6,row]]).empty?
         moves << Castling.new(king, [6,row])
       end
@@ -96,27 +96,27 @@ module Passant
     end
   
     # is it check for color? (color's turn)
-    def check?(color)
-      king = @board.king(color)
+    def check?(board, color)
+      king = board.king(color)
       return false unless king
     
-      enemy_moves = @board.all_moves(king.enemy_color, false).map{|m| m.to}
+      enemy_moves = board.all_moves(king.enemy_color, false).map{|m| m.to}
       return enemy_moves.include?(king.position)
     end
 
-    def checkmate?(color)
-      check?(color) and @board.all_moves(color, true).empty?
+    def checkmate?(board, color)
+      check?(board, color) and board.all_moves(color, true).empty?
     end
 
-    def draw?(color)
-      !check?(color) and @board.all_moves(color, true).empty?
+    def draw?(board, color)
+      !check?(board, color) and board.all_moves(color, true).empty?
     end
 
     private
   
-    def ignores_or_causes_self_check?(move)
-      new_board = @board.after_move(move)
-      new_board.rules.check?(move.piece.color)
+    def ignores_or_causes_self_check?(board, move)
+      new_board = board.after_move(move)
+      new_board.rules.check?(new_board, move.piece.color)
     end
     
   end

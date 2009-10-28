@@ -1,5 +1,6 @@
 
 require 'passant/game_board'
+require 'passant/data/extensions'
 require 'passant/ui/extensions'
 require 'passant/ui/common'
 

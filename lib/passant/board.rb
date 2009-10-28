@@ -35,7 +35,7 @@ module Passant
     attr_reader :pieces, :rules, :history, :takebacks
     
     def initialize(position=InitialPosition)
-      @rules = RulesEngine.new(self)
+      @rules = RulesEngine.instance
       @takebacks = []
       set position
     end
@@ -103,9 +103,17 @@ module Passant
       end
       rep
     end
-  
-    def to_s; to_a.reverse.join("\n"); end
-
+    
+    # used extensively
+    def to_s
+      @string_rep ||= to_a.reverse.join("\n")
+    end
+    
+    # used to invalidate @string_rep
+    def changed
+      @string_rep = nil
+    end
+    
     def all_moves(color, recurse=true, include_castlings=true)
       mvs = []
       @pieces.select{|p| p.color == color}.each do |p|

@@ -15,9 +15,9 @@ describe Passant::RulesEngine do
                  'RN......'])
       rook = board.at(a1)
       mv = Passant::Move.new(rook, a2)
-      board.rules.valid_linear_move?(mv).should == false
+      board.rules.valid_linear_move?(board, mv).should == false
       mv2 = Passant::Move.new(rook, a3)
-      board.rules.valid_linear_move?(mv2).should == false
+      board.rules.valid_linear_move?(board, mv2).should == false
     end
     
     it "should exclude moves which jump over enemy pieces" do
@@ -32,9 +32,9 @@ describe Passant::RulesEngine do
                  'RN......'])
       rook = board.at(a1)
       mv = Passant::Move.new(rook, a2)
-      board.rules.valid_linear_move?(mv).should == true
+      board.rules.valid_linear_move?(board, mv).should == true
       mv2 = Passant::Move.new(rook, a3)
-      board.rules.valid_linear_move?(mv2).should == false
+      board.rules.valid_linear_move?(board, mv2).should == false
     end
   end
   
@@ -104,7 +104,7 @@ describe Passant::RulesEngine do
                '........', 
                '.......r', 
                'K.......'])
-    board.rules.draw?(:white).should == true
+    board.rules.draw?(board, :white).should == true
   end
 
   it "should recognize checkmate" do
@@ -117,7 +117,7 @@ describe Passant::RulesEngine do
                '........', 
                '........', 
                'K.......'])
-    board.rules.checkmate?(:white).should == true
+    board.rules.checkmate?(board, :white).should == true
   end
 
   it "should allow queen-side castling" do
@@ -131,7 +131,7 @@ describe Passant::RulesEngine do
                 'PPPQPPPP',
                 'R...KBNR'  ])
     
-    c = board.rules.castlings(board.king(:white))
+    c = board.rules.castlings(board, board.king(:white))
     c.size.should == 1
     c.first.to.should == c1
   end
@@ -147,7 +147,7 @@ describe Passant::RulesEngine do
                 'PPPQ.PPP',
                 'RN..K..R'  ])
     
-    c = board.rules.castlings(board.king(:white))
+    c = board.rules.castlings(board, board.king(:white))
     c.size.should == 1
     c.first.to.should == g1
   end
