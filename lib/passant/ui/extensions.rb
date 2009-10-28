@@ -60,7 +60,7 @@ module Passant
       flipped = self.board.ui.flipped?
       
       y = ((flipped ? self.y : (7 - self.y))*60) + 5
-      x = (self.x * 60) + 10
+      x = ((flipped ? (7 - self.x) : self.x)*60) + 10
       dc.draw_bitmap(@bitmap, x, y, true)
     end
   end

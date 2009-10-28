@@ -35,7 +35,7 @@ module Passant::UI
     end
     
     def draw_square(pos, dc)
-      x = pos[0]
+      x = flipped? ? 7 - pos[0] : pos[0]
       y = flipped? ? pos[1] : 7 - pos[1]
       square = (x+y) % 2 == 0 ? @white : @black
 
@@ -62,7 +62,7 @@ module Passant::UI
     private
 
     def pos_for_point(point)
-      x = point.x / 60
+      x = flipped? ? (7 - (point.x / 60)) : (point.x / 60)
       y = flipped? ? (point.y / 60) : (7 - (point.y / 60))
       [x,y]
     end
