@@ -35,15 +35,17 @@ module Passant::UI
       file_menu.append(Wx::ID_OPEN, '&Open PGN', 'Open a PGN file')
       file_menu.append(Wx::ID_SAVE, '&Save PGN', 'Save as PGN file')
       file_menu.append(Wx::ID_ABOUT, 'About', 'About Passant')
+      file_menu.append(Wx::ID_EXIT, '&Quit', 'Quit Passant')
 
       board_menu = Wx::Menu.new
       flip_item = board_menu.append('Flip', 'Flip board.')
-      info_item = board_menu.append('Info', 'Info')
+      info_item = board_menu.append('Info', 'Display board info.')
       reset_board_item = board_menu.append('Reset', 'Reset board.')
       
       evt_menu Wx::ID_OPEN, :open_pgn
       evt_menu Wx::ID_SAVE, :not_implemented
       evt_menu Wx::ID_ABOUT, :about
+      evt_menu(Wx::ID_EXIT) {|evt| self.destroy}
       evt_menu flip_item, :flip_board
       evt_menu info_item, :show_info_frame
       evt_menu reset_board_item, :reset_board
