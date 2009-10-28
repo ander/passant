@@ -11,7 +11,7 @@ module Passant::UI
       sizer = Wx::BoxSizer.new(Wx::VERTICAL)
       
       @pgn_path = Wx::StaticText.new(self, Wx::ID_ANY, 
-                                     '<no file selected>')
+                                     'no file selected')
       open_file_b = Wx::Button.new(self, Wx::ID_ANY, 'Open PGN File')
       @game_list = Wx::ListBox.new(self, :style => Wx::LB_SINGLE)
       @load_game_b = Wx::Button.new(self, Wx::ID_ANY, 'Load Game')
@@ -66,6 +66,7 @@ module Passant::UI
         begin
           self.disable
           parent.reset_board
+          parent.set_info(game.tag_pairs)
           game.to_board(parent.board)
           
         rescue  Passant::Move::Invalid, Passant::Board::Exception,\

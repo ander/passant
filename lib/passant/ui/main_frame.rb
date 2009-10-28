@@ -63,6 +63,10 @@ module Passant::UI
       self.status_bar.set_status_text(str)
     end
 
+    def set_info(*args)
+      @info_frame.set_info(*args) if @info_frame
+    end
+
     def pulse
       @gauge.pulse
       @board_panel.draw_pending

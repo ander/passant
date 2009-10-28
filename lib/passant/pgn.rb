@@ -36,12 +36,16 @@ module Passant
         set_title
       end
       
-      def to_board(board=nil)
-        board ||= GameBoard.new
-        board.tag_pairs = @tag_pairs.map do |tp|
+      def tag_pairs
+        @tag_pairs.map do |tp|
           tp =~ /^\[([^\s]+)\s+"(.+)"\]$/
           TagPair.new($1,$2)
         end
+      end
+
+      def to_board(board=nil)
+        board ||= GameBoard.new
+        board.tag_pairs = self.tag_pairs
         move_data = @movetext.split(/[0-9]+\.|[0-9]+\.\.\./)
         move_data.each do |md|
           next if md.length == 0
