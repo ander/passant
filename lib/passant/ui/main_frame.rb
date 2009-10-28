@@ -74,6 +74,7 @@ module Passant::UI
     end
 
     def ready
+      @board_panel.draw_pending
       @gauge.set_value(0)
     end
 
