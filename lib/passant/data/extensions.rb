@@ -1,5 +1,3 @@
-require 'passant/data/data_store'
-require 'passant/rules_engine'
 
 module Passant
   

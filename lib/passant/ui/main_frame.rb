@@ -45,14 +45,15 @@ module Passant::UI
       evt_menu Wx::ID_OPEN, :open_pgn
       evt_menu Wx::ID_SAVE, :not_implemented
       evt_menu Wx::ID_ABOUT, :about
-      evt_menu(Wx::ID_EXIT) do |evt|
-        set_status "Saving board data.."
-        Wx::get_app.responsively { board.rules.data_store.write }
-        self.destroy
-      end
+      evt_menu(Wx::ID_EXIT) { self.destroy }
       evt_menu flip_item, :flip_board
       evt_menu info_item, :show_info_frame
       evt_menu reset_board_item, :reset_board
+      
+      evt_window_destroy do |event|
+        Passant::RulesEngine.instance.data_store.close
+        event.skip
+      end
 
       self.menu_bar.append(file_menu,  'File')
       self.menu_bar.append(board_menu, 'Board')
