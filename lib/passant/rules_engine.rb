@@ -116,7 +116,7 @@ module Passant
   
     def ignores_or_causes_self_check?(board, move)
       new_board = board.after_move(move)
-      new_board.rules.check?(new_board, move.piece.color)
+      new_board.check?(move.piece.color)
     end
     
   end

@@ -32,7 +32,19 @@ module Passant
                         'PPPPPPPP',
                         'RNBQKBNR'  ]
   
+    # delegate rule methods to RulesEngine passing self as first argument
+    def self.delegate_to_rules(*meths)
+      meths.each do |meth|
+        class_eval %Q(def #{meth}(*args)
+                        @rules.send('#{meth}', *([self]+args))
+                      end)
+      end
+    end
+    
     attr_reader :pieces, :rules, :history, :takebacks
+    
+    delegate_to_rules :valid_move?, :valid_linear_move?, :en_passant,
+                      :castlings, :check?, :checkmate?, :draw?
     
     def initialize(position=InitialPosition)
       @rules = RulesEngine.instance
