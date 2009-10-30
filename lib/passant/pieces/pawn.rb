@@ -1,8 +1,10 @@
 require 'passant/piece'
+require 'passant/pieces/queen'
 
 module Passant
   class Pawn < Piece
-  
+    @@white_promotion_piece = @@black_promotion_piece = Queen
+    
     def moves(recurse=true)
       mvs = []
 
@@ -38,7 +40,21 @@ module Passant
     end
   
     def self.promotion_piece(color)
-      Queen
+      case color
+      when :white
+        @@white_promotion_piece
+      when :black
+        @@black_promotion_piece
+      end
+    end
+    
+    def self.set_promotion_piece(color, piece_class)
+      case color
+      when :white
+        @@white_promotion_piece = piece_class
+      when :black
+        @@black_promotion_piece = piece_class
+      end
     end
   
   end

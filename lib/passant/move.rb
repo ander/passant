@@ -59,6 +59,7 @@ module Passant
     # O-O    : castling, king-side
     # exd5   : e-row pawn captures d5. just 'xd5' not allowed.
     # Nxd5   : knight captures d5
+    # h8=Q   : promotion
     # e2e4   : move using just square coordinates
     # Nexc4  : knight from e-column captures c4
     # N2xc4  : knight from row 2 captures c4
@@ -71,6 +72,13 @@ module Passant
       if to.nil?
         str = from.gsub(/[+\#]/, '')
         capture = str.delete!('x')
+
+        # the promotion piece setting, e.g. h8=Q
+        if str =~ /^.*(=.).*$/
+          Pawn.set_promotion_piece(color, 
+            Board::PieceLetterMap.detect{|k,v| v.include?($1[1,1])}[0])
+          str.gsub!($1, '')
+        end
         
         case str.length
         when 2

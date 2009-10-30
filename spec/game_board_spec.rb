@@ -223,7 +223,29 @@ describe Passant::GameBoard do
                                       'R.BQKB.R' ])
       b.move('N2xf3')
     end
-    
+
+    it "should parse moves correctly (11)" do
+      # from kasparov - fedorowicz WchT U26 Graz 1981
+      # testing the parsing of promotion (h8=Q+)
+      moves = %w(d4 Nf6 c4 e6 Nf3 b6 a3 c5 d5 Ba6 Qc2 exd5 cxd5 g6 Nc3 Bg7 
+                 g3 O-O Bg2 d6 O-O Re8 Re1 Qc7 Bf4 Nh5 Bd2 Nd7 Qa4 Bb7
+                 Qh4 a6 Rac1 b5 b4 Qd8 Bg5 f6 Bd2 f5 Bg5 Qb6 e4 cxb4
+                 axb4 Rac8 Be3 Qd8 Bg5 Qb6 exf5 Rxe1+ Rxe1 Bxc3 Re7 Rc4
+                 Qh3 Bc8 fxg6 Ndf6 Bxf6 Nxf6 gxh7+ Kf8 h8=Q+)
+      
+      b = Passant::GameBoard.new
+      moves.each{|mv| b.move(mv)}
+
+      b.should == Passant::Board.new(['..b..k.Q',
+                                      '....R...',
+                                      'pq.p.n..',
+                                      '.p.P....',
+                                      '.Pr.....',
+                                      '..b..NPQ',
+                                      '.....PBP',
+                                      '......K.' ])
+    end
+
   end
   
 end
