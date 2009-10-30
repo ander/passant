@@ -20,9 +20,8 @@ module Passant
       @capture_piece.capture if @capture_piece
       @piece.position = @to
       @piece.history << self
-      @piece.board.history << self
+      @piece.board.add_history(self)
       @piece.board.takebacks.clear unless @piece.board.takebacks.delete(self)
-      @piece.board.changed
       self
     end
   
@@ -30,9 +29,8 @@ module Passant
       @capture_piece.uncapture if @capture_piece
       @piece.position = @from
       @piece.history.delete(self)
-      @piece.board.history.delete(self)
+      @piece.board.remove_history(self)
       @piece.board.takebacks << self
-      @piece.board.changed
       self
     end
     

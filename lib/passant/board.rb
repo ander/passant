@@ -41,7 +41,7 @@ module Passant
       end
     end
     
-    attr_reader :pieces, :rules, :history, :takebacks
+    attr_reader :pieces, :rules, :takebacks
     
     delegate_to_rules :valid_move?, :valid_linear_move?, :en_passant,
                       :castlings, :check?, :checkmate?, :draw?
@@ -61,7 +61,7 @@ module Passant
     # so we have to guess the turn belongs to opponent of last move or white.
     # (Board is not turn based, see GameBoard)
     def move(from, to=nil)
-      color = history.last.nil? ? :white : opponent(history.last.piece.color)
+      color = last_move.nil? ? :white : opponent(last_move.piece.color)
       Move.parse(self, color, from, to).apply
     end
     
@@ -90,7 +90,21 @@ module Passant
     def reset
       set InitialPosition
     end
-  
+
+    def add_history(mv)
+      @history << mv
+      @string_rep = nil
+    end
+    
+    def remove_history(mv)
+      @history.delete(mv)
+      @string_rep = nil
+    end
+    
+    def last_move
+      @history.last
+    end
+    
     def set(board_data)
       @pieces = []
       @history = []
@@ -119,11 +133,6 @@ module Passant
     # used extensively
     def to_s
       @string_rep ||= to_a.reverse.join("\n")
-    end
-    
-    # used to invalidate @string_rep
-    def changed
-      @string_rep = nil
     end
     
     def all_moves(color, recurse=true, include_castlings=true)
@@ -157,7 +166,7 @@ module Passant
     end
   
     def take_back
-      last_mv = @history.last
+      last_mv = last_move
       last_mv.take_back if last_mv
     end
     

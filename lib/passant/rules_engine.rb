@@ -51,7 +51,7 @@ module Passant
     end
     
     def en_passant(board, pawn)
-      last_mv = board.history.last
+      last_mv = board.last_move
       if last_mv and \
         last_mv.piece.is_a?(Pawn) and \
         pawn.enemy?(last_mv.piece) and \
