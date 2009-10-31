@@ -62,12 +62,12 @@ module Passant
       private
       
       def set_title
-        title_parts = []
-        [2,0,4,5,6].each do |tp_i|
-          @tag_pairs[tp_i] =~ /\"(.*)\"/
-          title_parts << $1
-        end
-        @title = title_parts.join(' | ')
+        @title = format("%s %s: %s %s",
+                        tag_pairs[2].value,
+                        tag_pairs[0].value,
+                        (tag_pairs[4].value.split(',').first + ' vs. '+
+                        tag_pairs[5].value.split(',').first),
+                        tag_pairs[6].value)
       end
     end
     
