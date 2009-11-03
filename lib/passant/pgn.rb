@@ -4,6 +4,7 @@ require 'date'
 module Passant
   
   module PGN
+    CommentRegexp = /\{([^}]*)\}|;(.*)$/
 
     # A PGN tagpair
     class TagPair
@@ -30,7 +31,7 @@ module Passant
     # Reflects a single PGN game that converts to a GameBoard
     class Game
       attr_reader :title, :tag_pairs
-      
+
       def initialize(tag_pair_data, movetext)
         @movetext = movetext
         @tag_pairs = tag_pair_data.map do |tp|
@@ -43,19 +44,47 @@ module Passant
       def to_board(board=nil)
         board ||= GameBoard.new
         board.tag_pairs = self.tag_pairs
-        move_data = @movetext.split(/[0-9]+\.|[0-9]+\.\.\./)
-        move_data.each do |md|
-          next if md.length == 0
-          parts = md.split
-          board.move(parts[0])
-          # TODO: handle comments
-          if parts[1] and !%w(0-1 1-0 1/2-1/2).include?(parts[1])
-            board.move(parts[1])
-          end
-        end
+        move_data = @movetext.split(/[0-9]+\.{3}|[0-9]+\./)
+        move_data.each {|md| Game.parse_turn_or_ply(md, board)}
         board
       end
-      
+
+      def self.parse_turn_or_ply(str, board)
+        return if str.length == 0
+        
+        parts = str.split(' ', 2)
+        
+        if parts[0][-1,1] == ';' or (parts.size > 1 and parts[1].strip[0,1] == ';')
+          mv = board.move(parts[0].sub(';',''))
+          mv.comment = parts[1].sub(';','').strip
+          return
+        end
+
+        mv = board.move(parts.first)
+        
+        if parts.size > 1
+          rest = parts.last.strip
+          parts = rest.split(CommentRegexp).reverse
+          parts.pop if parts.last.empty?
+          str = parts.pop
+          
+          if rest.split(' ', 2).first.include?('{')
+            mv.comment = str
+            if parts.size > 0
+              mv2 = board.move(parts.pop.strip)
+              if !%w(0-1 1-0 1/2-1/2).include?(parts.last)
+                mv2.comment = parts.last unless parts.empty?
+              end
+            end
+          else
+            if !%w(0-1 1-0 1/2-1/2).include?(str)
+              mv2 = board.move(str.strip)
+              mv2.comment = parts.last.strip unless parts.empty?
+            end
+          end
+        end
+      end
+
       private
       
       def set_title

@@ -6,10 +6,10 @@ module Passant
     class Invalid < StandardError; end
     
     attr_reader :piece, :from, :to
-    attr_accessor :comments
+    attr_accessor :comment
     
     def initialize(piece, move_to)
-      @comments = nil
+      @comment = nil
       @piece = piece
       @from = piece.position
       @to = move_to
