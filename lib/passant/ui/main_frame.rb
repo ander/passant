@@ -88,6 +88,7 @@ module Passant::UI
     def reset_board
       board.reset
       @board_panel.paint_board
+      set_info(board.tag_pairs)
       set_status('Board reset.')
     end
     
