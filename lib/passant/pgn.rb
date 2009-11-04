@@ -48,44 +48,46 @@ module Passant
         move_data.each {|md| Game.parse_turn_or_ply(md, board)}
         board
       end
-
+      
+      # parses a turn or ply of movetext, e.g.
+      # * 'e4'
+      # * 'e4 e5'
+      # * 'e4 {a comment}'
+      # * 'e4 {a comment} e5'
+      # * 'e4 e5 {a comment}'
+      # * 'e4 ; a comment'
+      # * 'e4 e5 ; a comment'
+      # * 'e4 {a comment} e5 {second comment}'
+      # * 'e4 {a comment} e5 ; second comment'
       def self.parse_turn_or_ply(str, board)
         return if str.length == 0
         
-        parts = str.split(' ', 2)
+        first_move, rest = str.split(' ', 2)
         
-        if parts[0][-1,1] == ';' or (parts.size > 1 and parts[1].strip[0,1] == ';')
-          mv = board.move(parts[0].sub(';',''))
-          mv.comment = parts[1].sub(';','').strip
-          return
+        if rest
+          rest_1 = rest.split(' ', 2).first
+          rest_parts = rest.split(CommentRegexp)
+          rest_parts.delete('')
+          %w(0-1 1-0 1/2-1/2).each {|result| rest_parts.delete(result)}
         end
-
-        mv = board.move(parts.first)
         
-        if parts.size > 1
-          rest = parts.last.strip
-          parts = rest.split(CommentRegexp).reverse
-          parts.pop if parts.last.empty?
-          str = parts.pop
-          
-          if rest.split(' ', 2).first.include?('{')
-            mv.comment = str
-            if parts.size > 0
-              mv2 = board.move(parts.pop.strip)
-              if !%w(0-1 1-0 1/2-1/2).include?(parts.last)
-                mv2.comment = parts.last unless parts.empty?
-              end
-            end
-          else
-            if !%w(0-1 1-0 1/2-1/2).include?(str)
-              mv2 = board.move(str.strip)
-              mv2.comment = parts.last.strip unless parts.empty?
-            end
-          end
+        if rest.nil? or rest_parts.empty?
+          ply(board, first_move)
+        elsif rest_1 =~ /[;{]/
+          ply(board, first_move, rest_parts.delete_at(0))
+          ply(board, *rest_parts) unless rest_parts.empty?
+        else
+          ply(board, first_move)
+          ply(board, *rest_parts)
         end
       end
-
+      
       private
+      
+      def self.ply(board, movetext, comment=nil)
+        mv = board.move(movetext.strip)
+        mv.comment = comment.strip if comment
+      end
       
       def set_title
         @title = format("%s %s: %s %s",

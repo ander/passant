@@ -23,17 +23,10 @@ describe Passant::PGN do
     
     it "should parse comment after ;" do
       b = Passant::GameBoard.new
-      Passant::PGN::Game.parse_turn_or_ply('e4; This is a comment.', b)
-      b.last_move.comment.should == 'This is a comment.'
-    end
-    
-    it "should parse comment after ; (2)" do
-      b = Passant::GameBoard.new
       Passant::PGN::Game.parse_turn_or_ply('e4 ; This is a comment.', b)
       b.last_move.comment.should == 'This is a comment.'
     end
     
-
     it "should parse two moves w/o comments" do
       b = Passant::GameBoard.new
       Passant::PGN::Game.parse_turn_or_ply('e4 e5', b)
