@@ -61,14 +61,12 @@ module Passant
       # * 'e4 {a comment} e5 ; second comment'
       def self.parse_turn_or_ply(str, board)
         return if str.length == 0
-        
         first_move, rest = str.split(' ', 2)
         
         if rest
           rest_1 = rest.split(' ', 2).first
           rest_parts = rest.split(CommentRegexp)
           rest_parts.delete('')
-          %w(0-1 1-0 1/2-1/2).each {|result| rest_parts.delete(result)}
         end
         
         if rest.nil? or rest_parts.empty?
@@ -85,7 +83,10 @@ module Passant
       private
       
       def self.ply(board, movetext, comment=nil)
-        mv = board.move(movetext.strip)
+        movetext.gsub!(/0-1|1-0|1\/2-1\/2/, '')
+        movetext.strip!
+        return if movetext.empty?
+        mv = board.move(movetext)
         mv.comment = comment.strip if comment
       end
       
