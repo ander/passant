@@ -81,11 +81,11 @@ module Passant::UI
           to = pos_for_point(mouse_event.get_position)
           self.disable
           mv = @board.move(@from, to)
-          parent.set_status(mv.to_s)
+          pending << lambda {parent.set_status(mv.to_s)}
           
         rescue Passant::Move::Invalid, Passant::Board::Exception,\
                Passant::GameBoard::GameOver => e
-          parent.set_status(e.message)
+          pending << lambda {parent.set_status(e.message)}
         
         ensure  
           @from = nil
