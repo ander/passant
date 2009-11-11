@@ -22,8 +22,13 @@ module Passant::UI
       @gauge = Wx::Gauge.new(self,
                              :size => [480,20],
                              :range => 10)
+      sub_sizer = Wx::BoxSizer.new(Wx::HORIZONTAL)
+      @value_text = Wx::StaticText.new(self, :label => board.value_str)
+      sub_sizer.add(control_panel)
+      sub_sizer.add_spacer(20)
+      sub_sizer.add(@value_text)
       
-      [@board_panel, @gauge, control_panel].each do |item| 
+      [@board_panel, @gauge, sub_sizer].each do |item| 
         sizer.add(item)
       end
       
@@ -68,6 +73,7 @@ module Passant::UI
 
     def set_status(str)
       self.status_bar.set_status_text(str)
+      @value_text.set_label board.value_str # set elsewhere?
     end
 
     def set_info(*args)

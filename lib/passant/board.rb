@@ -9,7 +9,7 @@ require 'passant/pieces/pawn'
 require 'passant/pieces/queen'
 require 'passant/pieces/rook'
 require 'passant/rules_engine'
-require 'passant/evaluators/common_evaluator'
+require 'passant/evaluators/standard_evaluator'
 
 module Passant
 
@@ -51,12 +51,12 @@ module Passant
     delegate_to_rules :valid_move?, :valid_linear_move?, :en_passant,
                       :castlings, :check?, :checkmate?, :draw?
     
-    def_delegator :@evaluator, :value # forward value method to @evaluator
+    def_delegators :@evaluator, :value, :value_str
     
     def initialize(position=InitialPosition)
       @rules = RulesEngine.instance
       @takebacks = []
-      @evaluator = CommonEvaluator.new(self)
+      @evaluator = StandardEvaluator.new(self)
       set position
     end
 
