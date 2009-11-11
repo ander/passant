@@ -1,3 +1,4 @@
+require 'forwardable'
 
 require 'passant/squares'
 require 'passant/piece'
@@ -8,20 +9,22 @@ require 'passant/pieces/pawn'
 require 'passant/pieces/queen'
 require 'passant/pieces/rook'
 require 'passant/rules_engine'
+require 'passant/evaluators/common_evaluator'
 
 module Passant
 
   # Basic chess board.
   class Board
+    extend Forwardable
     class Exception < StandardError; end
     
     PieceLetterMap = { Pawn   => ['P','p'],
-                       Rook   => ['R','r'],
                        Knight => ['N','n'],
                        Bishop => ['B','b'],
+                       Rook   => ['R','r'],
                        Queen  => ['Q','q'],
                        King   => ['K','k'] }
-
+    
     # White's left rook is origo (0,0)
     InitialPosition = [ 'rnbqkbnr',
                         'pppppppp',
@@ -43,12 +46,17 @@ module Passant
     
     attr_reader :pieces, :rules, :takebacks
     
+    attr_accessor :evaluator
+    
     delegate_to_rules :valid_move?, :valid_linear_move?, :en_passant,
                       :castlings, :check?, :checkmate?, :draw?
+    
+    def_delegator :@evaluator, :value # forward value method to @evaluator
     
     def initialize(position=InitialPosition)
       @rules = RulesEngine.instance
       @takebacks = []
+      @evaluator = CommonEvaluator.new(self)
       set position
     end
 
