@@ -10,6 +10,8 @@ require 'passant/pieces/queen'
 require 'passant/pieces/rook'
 require 'passant/rules_engine'
 require 'passant/evaluators/standard_evaluator'
+require 'passant/evaluators/berliner_evaluator'
+require 'passant/evaluators/composite_evaluator'
 
 module Passant
 
@@ -56,7 +58,8 @@ module Passant
     def initialize(position=InitialPosition)
       @rules = RulesEngine.instance
       @takebacks = []
-      @evaluator = StandardEvaluator.new(self)
+      @evaluator = CompositeEvaluator.new(self, StandardEvaluator, 
+                                          BerlinerEvaluator)
       set position
     end
 
