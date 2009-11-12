@@ -69,6 +69,157 @@ describe Passant::Pawn do
       white_pawn.moves.map{|m| m.class}.should == [Passant::Promotion]
       black_pawn.moves.map{|m| m.class}.should == [Passant::Promotion]
     end
-
   end
+  
+  describe "#isolated?" do
+    it "should return false if connected on both sides" do
+      board = Passant::Board.new(
+              [ '........',
+                '........',
+                '........',
+                '........',
+                '........',
+                '........',
+                'PPP.....',
+                '........'  ])
+      pawn = board.at(b2)
+      pawn.isolated?.should == false
+    end
+    
+    it "should return false if connected on left" do
+      board = Passant::Board.new(
+              [ '........',
+                '........',
+                '........',
+                '..P.....',
+                '........',
+                '.P......',
+                '........',
+                '........'  ])
+      pawn = board.at(c5)
+      pawn.isolated?.should == false
+    end
+    
+    it "should return false if connected on right" do
+      board = Passant::Board.new(
+              [ '........',
+                '........',
+                '........',
+                '.P......',
+                '........',
+                '..P.....',
+                '........',
+                '........'  ])
+      pawn = board.at(b5)
+      pawn.isolated?.should == false
+    end
+    
+    it "should return true if really isolated" do
+      board = Passant::Board.new(
+              [ '........',
+                'ppppp...',
+                '........',
+                'P...P...',
+                '.....P..',
+                '..P.....',
+                '........',
+                '........'  ])
+      pawn = board.at(c3)
+      pawn.isolated?.should == true
+    end
+  end
+  
+  describe "#passed?" do
+    it "should return false if enemy pawn in same file" do
+      board = Passant::Board.new(
+              [ '........',
+                '....p...',
+                '........',
+                '....P...',
+                '...P....',
+                '........',
+                '........',
+                '........'  ])
+      
+      pawn = board.at(e5)
+      pawn.passed?.should == false
+    end
+    
+    it "should return true if enemy pawn in same file but behind" do
+      board = Passant::Board.new(
+              [ '........',
+                '........',
+                '........',
+                '....P...',
+                '...P....',
+                '....p...',
+                '........',
+                '........'  ])
+      
+      pawn = board.at(e5)
+      pawn.passed?.should == true
+    end
+    
+    it "should return false if enemy pawn in adjacent file (right)" do
+      board = Passant::Board.new(
+              [ '........',
+                '.....p..',
+                '........',
+                '....P...',
+                '........',
+                '........',
+                '........',
+                '........'  ])
+      
+      pawn = board.at(e5)
+      pawn.passed?.should == false
+    end
+    
+    it "should return true if enemy pawn behind in adjacent file (right)" do
+      board = Passant::Board.new(
+              [ '........',
+                '........',
+                '........',
+                '....P...',
+                '.....p..',
+                '........',
+                '........',
+                '........'  ])
+      
+      pawn = board.at(e5)
+      pawn.passed?.should == true
+    end
+    
+    it "should return false if enemy pawn in adjacent file (left)" do
+      board = Passant::Board.new(
+              [ '........',
+                '........',
+                '...p....',
+                '....P...',
+                '........',
+                '........',
+                '........',
+                '........'  ])
+      
+      pawn = board.at(e5)
+      pawn.passed?.should == false
+    end
+    
+    it "should return true if enemy pawn behind in adjacent file (left)" do
+      board = Passant::Board.new(
+              [ '........',
+                '........',
+                '........',
+                '....P...',
+                '...p....',
+                '........',
+                '........',
+                '........'  ])
+      
+      pawn = board.at(d4)
+      pawn.passed?.should == true
+    end
+    
+  end
+  
 end

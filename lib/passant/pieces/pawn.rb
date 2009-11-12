@@ -57,6 +57,23 @@ module Passant
       end
     end
   
+    # http://en.wikipedia.org/wiki/Connected_pawns
+    def connected?
+      !isolated?
+    end
+    
+    def isolated?
+      @board.pieces.detect{|p| p.class == Pawn and p.color == color and \
+                               [x-1, x+1].include?(p.x)}.nil?
+    end
+    
+    # http://en.wikipedia.org/wiki/Passed_pawn
+    def passed?
+      @board.pieces.detect{|p| p.class == Pawn and enemy?(p) and \
+                               [x-1, x, x+1].include?(p.x) and
+                               (white? ? p.y > y : p.y < y)}.nil?
+    end
+  
   end
 
 end
