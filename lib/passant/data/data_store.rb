@@ -1,6 +1,4 @@
 
-require 'yaml'
-
 module Passant
   
   class DataStore
