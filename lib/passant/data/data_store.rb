@@ -1,3 +1,4 @@
+require 'passant/logging'
 
 module Passant
   
@@ -20,16 +21,16 @@ module Passant
       tables = db.execute('SELECT name FROM sqlite_master WHERE type = "table"')
       
       unless tables.flatten.include?('boards')
-        puts "Creating db..."
+        Passant::LOGGER.info "Creating db..."
         db.execute(CREATE_TABLE_SQL)
       else
-        puts "Opened database with info on " +
-             "#{@db.get_first_value('select count(*) from boards')} boards."
+        Passant::LOGGER.info "Opened database with info on " +
+          "#{@db.get_first_value('select count(*) from boards')} boards."
       end
     end
 
     def close
-      puts "Closing db..."
+      Passant::LOGGER.info "Closing db..."
       @db.close 
     end
 

@@ -1,5 +1,5 @@
 require 'forwardable'
-
+require 'passant/logging'
 require 'passant/squares'
 require 'passant/piece'
 require 'passant/pieces/bishop'
