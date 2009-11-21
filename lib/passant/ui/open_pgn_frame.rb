@@ -68,9 +68,11 @@ module Passant::UI
           parent.reset_board
           parent.set_info(game.tag_pairs)
           game.to_board(parent.board)
+          parent.set_status("Game loaded. Last move: #{parent.board.last_move}")
           
         rescue  Passant::Move::Invalid, Passant::Board::Exception,\
                Passant::GameBoard::GameOver => e
+          
           parent.set_status(e.message)
         
         ensure
