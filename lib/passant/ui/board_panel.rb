@@ -55,7 +55,7 @@ module Passant::UI
     end
     
     def draw_pending
-      while pending_draw = @pending.pop
+      while pending_draw = @pending.delete_at(0)
         pending_draw.call
       end
     end
