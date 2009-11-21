@@ -21,6 +21,7 @@ module Passant
       @turn = :white
       @board_result = '*' # kept separate from the PGN result tag,
                           # which is updated only when the game ends
+      self.tag_pairs = PGN::TagPair.required
     end
     
     def set(board_data, turn=:white)
