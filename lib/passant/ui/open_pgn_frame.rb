@@ -19,10 +19,10 @@ module Passant::UI
       
       sizer.add(open_file_b, 0, Wx::ALIGN_CENTER)
       sizer.add_spacer(20)
-      sizer.add(@pgn_path, 0, Wx::ALIGN_CENTER)
+      sizer.add(@pgn_path, 0, Wx::ALL, 5)
       sizer.add_spacer(10)
-      sizer.add(@game_list, 1, Wx::GROW)
-      sizer.add(@load_game_b, 0, Wx::ALIGN_RIGHT)
+      sizer.add(@game_list, 1, Wx::GROW | Wx::ALL, 5)
+      sizer.add(@load_game_b, 0, Wx::ALIGN_RIGHT | Wx::ALL, 5)
 
       evt_button open_file_b, :open_file
       evt_button @load_game_b, :load_game
