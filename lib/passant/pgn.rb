@@ -12,8 +12,7 @@ module Passant
       attr_reader :key
       
       def initialize(key, value)
-        @key = key || ''
-        @value = value || ''
+        @key, @value = key, value
       end
       
       def self.required
@@ -35,8 +34,8 @@ module Passant
       def initialize(tag_pair_data, movetext)
         @movetext = movetext
         @tag_pairs = tag_pair_data.map do |tp|
-          tp =~ /^\[([^\s]+)\s+"(.+)"\]$/
-          TagPair.new($1,$2)
+          tp =~ /^\[([^\s]+)\s+"(.*)"\]$/
+          TagPair.new($1, ($2 || ''))
         end
         set_title
       end
