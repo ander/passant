@@ -149,11 +149,8 @@ module Passant
     def all_moves(color, recurse=true, include_castlings=true)
       mvs = []
       @pieces.select{|p| p.color == color}.each do |p|
-        if !include_castlings and p.class == King
-          mvs << p.moves(recurse, false)
-        else
-          mvs << p.moves(recurse)
-        end
+        mvs << p.moves({:recurse => recurse, 
+                        :include_castlings => include_castlings})
       end
       mvs.flatten
     end

@@ -5,7 +5,7 @@ module Passant
   class Pawn < Piece
     @@white_promotion_piece = @@black_promotion_piece = Queen
     
-    def moves(recurse=true)
+    def moves(opts={:recurse => true})
       mvs = []
 
       # one square advance
@@ -15,23 +15,23 @@ module Passant
         move_class = Move
       end    
       mv1 = move_class.new(self, [x, y+advance_direction])
-      mvs.push(mv1) if @board.valid_move?(mv1, false, recurse)
+      mvs.push(mv1) if @board.valid_move?(mv1, false, opts[:recurse])
     
       # two squares advance
       mv2 = Move.new(self, [x, y+2*advance_direction])
       mvs.push(mv2) if !self.moved? and \
                        !@board.off_limits?([x, y+2*advance_direction]) and \
-                       @board.valid_linear_move?(mv2, false, recurse)
+                       @board.valid_linear_move?(mv2, false, opts[:recurse])
     
       # capture 1
       c1 = move_class.new(self, [x+1, y+advance_direction])
       mvs.push(c1) if self.enemy?(@board.at([x+1, y+advance_direction])) and \
-                      @board.valid_move?(c1, true, recurse)
+                      @board.valid_move?(c1, true, opts[:recurse])
 
       # capture 2
       c2 = move_class.new(self, [x-1, y+advance_direction])
       mvs.push(c2) if self.enemy?(@board.at([x-1, y+advance_direction])) and \
-                      @board.valid_move?(c2, true, recurse)
+                      @board.valid_move?(c2, true, opts[:recurse])
     
       # en passant
       ep = @board.en_passant(self)

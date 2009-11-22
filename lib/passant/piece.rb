@@ -22,7 +22,7 @@ module Passant
     def x; @position[0]; end
     def y; @position[1]; end
     
-    def moves(recurse=true)
+    def moves(opts={:recurse => true})
       raise "Define moves by overriding #moves (#{self.class})!"
     end
     
