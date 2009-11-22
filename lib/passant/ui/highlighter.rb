@@ -7,11 +7,27 @@ module Passant::UI
     def initialize(board_panel)
       @board_panel = board_panel
       @highlight_last_move = true
-      @mark_pawns = false
+      @mark_pawns = true
       @hl_pen = Wx::Pen.new(Wx::RED, 3)
     end
     
     def highlight(dc)
+      if @mark_pawns
+        @board_panel.board.pieces.select{|p| p.is_a?(Passant::Pawn)}.each do |p|
+          if p.passed?
+            point = @board_panel.point_for_pos(p.position)
+            dc.set_brush(Wx::GREEN_BRUSH)
+            dc.draw_circle(point.x+51, point.y+9, 3)
+          end
+          
+          if p.isolated?
+            point = @board_panel.point_for_pos(p.position)
+            dc.set_brush(Wx::CYAN_BRUSH)
+            dc.draw_circle(point.x+51, point.y+15, 3)
+          end
+        end
+      end
+      
       if @highlight_last_move and mv = @board_panel.board.last_move
         square_hl(dc, mv.from)
         square_hl(dc, mv.to)
