@@ -3,11 +3,11 @@ require 'passant/game_board'
 require 'passant/data/init'
 require 'passant/ui/extensions'
 require 'passant/ui/common'
+require 'passant/ui/highlighter'
 
 module Passant::UI
   class BoardPanel < Wx::Panel
-    attr_accessor :board
-    attr_reader :pending
+    attr_reader :board, :pending, :highlighter
     
     def initialize(parent)
       super(parent, :size => [480,480])
@@ -20,6 +20,7 @@ module Passant::UI
       @black = Passant::UI.bitmapify('black_square.png')
       @flipped = false
       @pending = []
+      @highlighter = Highlighter.new(self)
       show
     end
     
@@ -51,6 +52,7 @@ module Passant::UI
           end
         end
         @board.pieces.each {|p| p.draw(dc) }
+        @highlighter.highlight(dc)
       end
     end
     
@@ -60,11 +62,17 @@ module Passant::UI
       end
     end
     
+    def point_for_pos(pos)
+      x = flipped? ? 420 - (pos[0] * 60) : pos[0]*60
+      y = flipped? ? pos[1] * 60 : 420 - (pos[1]*60)
+      Wx::Point.new(x,y)
+    end
+    
     private
 
     def pos_for_point(point)
-      x = flipped? ? (7 - (point.x / 60)) : (point.x / 60)
-      y = flipped? ? (point.y / 60) : (7 - (point.y / 60))
+      x = flipped? ? 7 - (point.x / 60) : point.x / 60
+      y = flipped? ? point.y / 60 : 7 - (point.y / 60)
       [x,y]
     end
 

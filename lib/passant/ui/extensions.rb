@@ -41,7 +41,6 @@ module Passant
         end
         
         ui.draw_square(@capture_piece.position, dc) if self.class == EnPassant
-        
         participants.each {|p| p.draw(dc)}
       end
     end
