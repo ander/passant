@@ -22,34 +22,6 @@ describe Passant::GameBoard do
       lambda { b.move(a7,a6) }.should raise_error(Passant::Board::Exception)
     end
 
-    it "should raise GameOver when game checkmated" do
-      b = Passant::GameBoard.new
-      b.set(['k.......', 
-             '........', 
-             '........', 
-             '........',
-             '........', 
-             '........', 
-             '..R.....', 
-             '.R......'], :white)
-      lambda { b.move(c2, a2)}.should raise_error(Passant::GameBoard::GameOver,
-                                                  "1-0")
-    end
-    
-    it "should raise GameOver when game drawn" do
-      b = Passant::GameBoard.new
-      b.set(['k.......', 
-             '........', 
-             '........', 
-             '........',
-             '........', 
-             '........', 
-             '..R.....', 
-             '.R......'], :white)
-      lambda { b.move(c2, c7)}.should raise_error(Passant::GameBoard::GameOver,
-                                                  "1/2-1/2")
-    end
-
     it "should parse moves correctly (1)" do
       b = Passant::GameBoard.new
       b.move('e4')

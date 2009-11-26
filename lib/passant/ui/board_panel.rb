@@ -91,8 +91,7 @@ module Passant::UI
           mv = @board.move(@from, to)
           pending << lambda {parent.set_status(mv.to_s)}
           
-        rescue Passant::Move::Invalid, Passant::Board::Exception,\
-               Passant::GameBoard::GameOver => e
+        rescue Passant::Move::Invalid, Passant::Board::Exception
           pending << lambda {parent.set_status(e.message)}
         
         ensure  
