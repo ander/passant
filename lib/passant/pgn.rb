@@ -144,16 +144,26 @@ module Passant
       def pgn_result; self.tag_pairs[6].value end
       def pgn_result=(r); self.tag_pairs[6].value = r end
       
-      def movetext
-        movetext = ''
-        movedata = []
+      def movetext_array
+        movetext_arr = []
         
         (@history.size.to_f / 2).ceil.times do |turn|
-          turn_str = "#{turn+1}."
-          turn_str += @history[turn*2].to_pgn
-          turn_str += (" "+@history[(turn*2)+1].to_pgn) if @history[(turn*2)+1]
-          turn_str += ' '
-          movedata << turn_str
+          turn_arr = []
+          turn_arr << "#{turn+1}."
+          turn_arr << @history[turn*2].to_pgn
+          turn_arr << @history[(turn*2)+1].to_pgn if @history[(turn*2)+1]
+          movetext_arr << turn_arr
+        end
+        
+        movetext_arr
+      end
+      
+      def movetext
+        movetext = ''
+        movedata = movetext_array.map do |md|
+          str = "#{md[0]}#{md[1]} "
+          str += "#{md[2]} " if md[2]
+          str
         end
         
         row = ''

@@ -73,7 +73,8 @@ module Passant::UI
 
     def set_status(str)
       self.status_bar.set_status_text(str)
-      @value_text.set_label board.value_str # set elsewhere?
+      @value_text.set_label board.value_str
+      set_info
     end
 
     def set_info(*args)
