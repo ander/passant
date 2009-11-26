@@ -12,17 +12,16 @@ module Passant::UI
       
       set_sizer(sizer)
       
-      evt_button(take_back_b.id)     { |event| take_back }
-      evt_button(undo_takeback_b.id) { |event| undo_takeback }
+      evt_button(take_back_b)     { |event| take_back }
+      evt_button(undo_takeback_b) { |event| undo_takeback }
     end
 
     private
-
     
     def take_back
       mv = parent.board.take_back
       if mv
-        parent.set_status("Took back #{mv}.")
+        parent.set_status("Took back #{mv.to_pgn}.")
         mv.piece.board.ui.refresh
       end
     end
@@ -33,7 +32,7 @@ module Passant::UI
       end
       
       if mv
-        parent.set_status(mv.to_s) 
+        parent.set_status(mv.to_pgn) 
         mv.piece.board.ui.refresh
       end
     end

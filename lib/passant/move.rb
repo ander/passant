@@ -39,6 +39,14 @@ module Passant
       c = capture? ? 'x' : ''
       "#{l}#{chess_coords(@from)}#{c}#{chess_coords(@to)}"
     end
+    
+    def to_pgn
+      if @comment
+        self.to_s + " {#{@comment}}"
+      else
+        self.to_s
+      end
+    end
 
     def capture?
       !@capture_piece.nil?

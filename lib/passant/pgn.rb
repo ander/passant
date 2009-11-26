@@ -144,9 +144,31 @@ module Passant
       def pgn_result; self.tag_pairs[6].value end
       def pgn_result=(r); self.tag_pairs[6].value = r end
       
+      # TODO: support semicolon comments
       def to_pgn
-        tag_pairs.map{|t| t.to_pgn}.join("\n")
-        # TODO: movetext
+        pgn = tag_pairs.map{|t| t.to_pgn}.join("\n") + "\n\n"
+        
+        movedata = []
+        (@history.size.to_f / 2).ceil.times do |turn|
+          turn_str = "#{turn+1}."
+          turn_str += @history[turn*2].to_pgn
+          turn_str += (" "+@history[(turn*2)+1].to_pgn) if @history[(turn*2)+1]
+          turn_str += ' '
+          movedata << turn_str
+        end
+        
+        row = ""
+        movedata.each do |md|
+          if (row + md).length < 80
+            row += md
+          else
+            pgn += (row + "\n")
+            row = md
+          end
+        end
+        
+        pgn += (row + "#{pgn_result}\n")
+        pgn
       end
     end
   end
