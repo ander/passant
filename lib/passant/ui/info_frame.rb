@@ -1,18 +1,19 @@
 
 module Passant::UI
   
-  class InfoGrid < Wx::Grid
-    def initialize(parent, cols)
-      super(parent)
-      create_grid(0,cols)
-      self.col_label_size = 0
-      set_col_size(0, 150)
-      enable_drag_grid_size(false)
-      enable_drag_row_size(false)
-    end
-  end
-  
   class InfoFrame < Wx::Frame
+    
+    class InfoGrid < Wx::Grid
+      def initialize(parent, cols)
+        super(parent)
+        create_grid(0,cols)
+        self.col_label_size = 0
+        set_col_size(0, 150)
+        enable_drag_grid_size(false)
+        enable_drag_row_size(false)
+      end
+    end
+    
     def initialize(parent)
       super(parent, 
             :title => "Passant: Board Info",
