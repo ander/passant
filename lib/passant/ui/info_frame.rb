@@ -8,9 +8,9 @@ module Passant::UI
         @click_callback = click_callback
       end
       def begin_edit(row, col, grid)
-        super
         @click_only_row = row
         @click_only_col = col
+        super
       end
       def starting_click
         @click_callback.call(@click_only_row, @click_only_col)
