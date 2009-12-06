@@ -41,7 +41,7 @@ module Passant
     end
     
     def to_pgn
-      if @comment
+      if @comment and @comment.length > 0
         self.to_s + " {#{@comment}}"
       else
         self.to_s
