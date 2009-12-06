@@ -46,7 +46,7 @@ module Passant
       end
     end
     
-    attr_reader :pieces, :rules, :takebacks
+    attr_reader :pieces, :rules, :takebacks, :history
     
     attr_accessor :evaluator
     
@@ -130,7 +130,7 @@ module Passant
         end
       end
     end
-
+    
     def to_a
       rep = ['........', '........', '........', '........',
              '........', '........', '........', '........']
