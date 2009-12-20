@@ -21,7 +21,7 @@ module Passant
       @piece.position = @to
       @piece.history << self
       @piece.board.add_history(self)
-      @piece.board.takebacks.clear unless @piece.board.takebacks.delete(self)
+      @piece.board.clear_takebacks_after(self)
       self
     end
   
@@ -30,7 +30,7 @@ module Passant
       @piece.position = @from
       @piece.history.delete(self)
       @piece.board.remove_history(self)
-      @piece.board.takebacks << self
+      @piece.board.add_takeback(self)
       self
     end
     

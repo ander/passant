@@ -46,9 +46,17 @@ module Passant
       end
     end
     
-    attr_reader :pieces, :rules, :takebacks, :history
+    def self.freezing_attr_reader(*names)
+      names.each do |name|
+        class_eval %Q(def #{name}
+                        @#{name}.dup.freeze
+                      end)
+      end
+    end
     
+    attr_reader :rules
     attr_accessor :evaluator
+    freezing_attr_reader :pieces, :takebacks, :history
     
     delegate_to_rules :valid_move?, :valid_linear_move?, :en_passant,
                       :castlings, :check?, :checkmate?, :draw?
@@ -182,7 +190,15 @@ module Passant
       tb = @takebacks.last
       tb.apply if tb
     end
-
+    
+    def add_takeback(mv)
+      @takebacks << mv
+    end
+    
+    def clear_takebacks_after(mv)
+      @takebacks.clear unless @takebacks.delete(mv)
+    end
+    
     # N.B. does not take history into account
     def ==(other)
       self.to_s == other.to_s
