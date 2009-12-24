@@ -46,10 +46,10 @@ module Passant
       end
     end
     
-    def self.freezing_attr_reader(*names)
-      names.each do |name|
-        class_eval %Q(def #{name}
-                        @#{name}.dup.freeze
+    def self.freezing_attr_reader(*attribute_names)
+      attribute_names.each do |attribute_name|
+        class_eval %Q(def #{attribute_name}
+                        @#{attribute_name}.dup.freeze
                       end)
       end
     end
