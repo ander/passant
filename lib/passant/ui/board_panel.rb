@@ -88,7 +88,7 @@ module Passant::UI
         begin
           to = pos_for_point(mouse_event.get_position)
           self.disable
-          mv = @board.move(@from, to)
+          mv = @board.move_abs(@from, to)
           pending << lambda {parent.set_status(mv.to_pgn)}
           
         rescue Passant::Move::Invalid, Passant::Board::Exception => e

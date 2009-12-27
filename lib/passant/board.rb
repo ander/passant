@@ -75,13 +75,24 @@ module Passant
       Board.new(['.'*8]*8)
     end
     
-    # The method to call to move a piece.
-    # move parsing needs a color if 'to' is not provided,
-    # so we have to guess the turn belongs to opponent of last move or white.
+    # Move a piece.
+    # Move parsing needs a color so we have to guess the turn belongs to 
+    # opponent of last move or white.
     # (Board is not turn based, see GameBoard)
-    def move(from, to=nil)
+    def move(move_str)
       color = last_move.nil? ? :white : opponent(last_move.piece.color)
-      Move.parse(self, color, from, to).apply
+      MoveParser.instance.parse(self, color, move_str).apply
+    end
+    
+    # Move using absolute from and to squares
+    def move_abs(from, to)
+      piece = self.at(from)
+      mv = piece ? piece.move_leading_to(to) : nil
+      if mv
+        mv.apply
+      else
+        raise Exception.new("Invalid move: from #{from} to #{to}")
+      end
     end
     
     def add_piece(piece)

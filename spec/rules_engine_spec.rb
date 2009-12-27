@@ -91,7 +91,7 @@ describe Passant::RulesEngine do
                                 '.......P',
                                 'PPP.....',
                                 '...R..K.'])
-    Passant::Move.parse(board, :black, 'Rxd8')
+    Passant::MoveParser.instance.parse(board, :black, 'Rxd8')
   end
   
   it "should recognize draw" do

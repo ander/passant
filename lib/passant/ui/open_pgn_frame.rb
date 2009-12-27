@@ -70,8 +70,7 @@ module Passant::UI
           game.to_board(parent.board)
           parent.set_status("Game loaded. Last move: #{parent.board.last_move}")
           
-        rescue  Passant::Move::Invalid, Passant::Board::Exception,\
-               Passant::GameBoard::GameOver => e
+        rescue  Passant::MoveParser::ParseError, Passant::Board::Exception => e
           
           parent.set_status(e.message)
         

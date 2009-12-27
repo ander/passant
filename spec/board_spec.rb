@@ -25,19 +25,19 @@ describe Passant::Board do
   describe "#move" do
     it "should make a valid move" do
       b = Passant::Board.new
-      b.move(a2,a4)
+      b.move_abs(a2,a4)
       b.at(a4).class.should == Passant::Pawn
     end
     
-    it "should raise InvalidMove if nothing to move" do
+    it "should raise ParseError if nothing to move" do
       b = Passant::Board.new
-      lambda { b.move(a3,a4) }.should raise_error Passant::Move::Invalid
+      lambda { b.move_abs(a3,a4) }.should raise_error Passant::Board::Exception
     end
 
-    it "should raise InvalidMove if invalid move for piece" do
+    it "should raise ParseError if invalid move for piece" do
       b = Passant::Board.new
       b.at(a2).class.should == Passant::Pawn
-      lambda { b.move(a2,a5) }.should raise_error Passant::Move::Invalid
+      lambda { b.move_abs(a2,a5) }.should raise_error Passant::Board::Exception
     end
     
     it "should not recurse infinitely with castling (1)" do

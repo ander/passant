@@ -10,16 +10,16 @@ describe Passant::GameBoard do
   describe "#move" do
     it "should alternate the turn color" do
       b = Passant::GameBoard.new
-      b.move(a2,a4)
+      b.move_abs(a2,a4)
       b.turn.should == :black
-      b.move(a7,a5)
+      b.move_abs(a7,a5)
       b.turn.should == :white
     end
     
     it "should raise InvalidMove if moving on wrong turn" do
       b = Passant::GameBoard.new
       b.at(a7).color.should == :black
-      lambda { b.move(a7,a6) }.should raise_error(Passant::Board::Exception)
+      lambda { b.move_abs(a7,a6) }.should raise_error(Passant::Board::Exception)
     end
 
     it "should parse moves correctly (1)" do

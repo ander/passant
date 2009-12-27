@@ -29,6 +29,10 @@ module Passant
     # return true if this piece has been moved
     def moved?; !@history.empty?; end
 
+    def move_leading_to(square)
+      self.moves.detect{|m| m.to == square}
+    end
+    
     def self.advance_direction(color)
       color == :white ? 1 : -1
     end
