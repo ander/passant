@@ -105,7 +105,7 @@ module Passant
         end
       end
       
-      raise ParseError.new("Invalid move: #{from}") if mv.nil?
+      raise ParseError.new("Invalid move: #{move_str}") if mv.nil?
       
       mv
     end
