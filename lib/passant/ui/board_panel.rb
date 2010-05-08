@@ -91,7 +91,7 @@ module Passant::UI
           mv = @board.move_abs(@from, to)
           pending << lambda {parent.set_status(mv.to_pgn)}
           
-        rescue Passant::Move::Invalid, Passant::Board::Exception => e
+        rescue Passant::MoveParser::ParseError, Passant::Board::Exception => e
           pending << lambda {parent.set_status(e.message)}
         
         ensure  

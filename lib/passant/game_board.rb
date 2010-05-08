@@ -44,17 +44,16 @@ module Passant
     def move_abs(from, to)
       piece = self.at(from)
       
-      if piece.color != @turn
+      if piece and piece.color != @turn
         raise Board::Exception.new("#{@turn.to_s.capitalize}'s turn!")
       end
       
-      mv = piece ? piece.move_leading_to(to) : nil
-      if mv
+      if piece and mv = piece.move_leading_to(to)
         mv.apply
         @turn = opponent(@turn)
         mv
       else
-        raise Exception.new("Invalid move: from #{from} to #{to}")
+        raise Exception.new("Invalid move.")
       end
     end
     

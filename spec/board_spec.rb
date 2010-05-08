@@ -65,7 +65,23 @@ describe Passant::Board do
                  'R...K..R'])
       board.move('O-O')
     end
+  end
 
+  describe "#move_abs" do
+    it "should not raise with valid move" do
+      b = Passant::Board.new
+      b.move_abs([0,1], [0,2])
+    end
+    
+    it "should raise exception if no piece in starting square" do
+      b = Passant::Board.new
+      lambda {b.move_abs([0,2], [0,3])}.should raise_error Passant::Board::Exception
+    end
+    
+    it "should raise exception if no move" do
+      b = Passant::Board.new
+      lambda {b.move_abs([0,1], [0,4])}.should raise_error Passant::Board::Exception
+    end
   end
 
 end

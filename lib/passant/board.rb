@@ -80,18 +80,17 @@ module Passant
     # opponent of last move or white.
     # (Board is not turn based, see GameBoard)
     def move(move_str)
-      color = last_move.nil? ? :white : opponent(last_move.piece.color)
+      color = last_move ? opponent(last_move.piece.color) : :white
       MoveParser.instance.parse(self, color, move_str).apply
     end
     
     # Move using absolute from and to squares
     def move_abs(from, to)
       piece = self.at(from)
-      mv = piece ? piece.move_leading_to(to) : nil
-      if mv
+      if piece and mv = piece.move_leading_to(to)
         mv.apply
       else
-        raise Exception.new("Invalid move: from #{from} to #{to}")
+        raise Exception.new("Invalid move.")
       end
     end
     
