@@ -7,7 +7,6 @@ module Passant
     class ParseError < StandardError; end
     
     # = Move Parsing 
-    # If 'to' is nil, move is parsed from a string.
     #
     # Example cases:
     # e4     : e-row pawn to e4 (from e2 or e3)

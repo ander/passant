@@ -3,6 +3,7 @@ require 'passant/game_board'
 require 'passant/data/init'
 require 'passant/ui/extensions'
 require 'passant/ui/common'
+require 'passant/ui/board_ui_decorator'
 require 'passant/ui/highlighter'
 
 module Passant::UI
@@ -15,7 +16,9 @@ module Passant::UI
       evt_left_down :click_piece
       evt_left_up   :release_piece
       
-      set_board Passant::GameBoard.new
+      board = Passant::GameBoard.new
+      board.extend BoardUIDecorator
+      set_board board
       @white = Passant::UI.bitmapify('white_square.png')
       @black = Passant::UI.bitmapify('black_square.png')
       @flipped = false

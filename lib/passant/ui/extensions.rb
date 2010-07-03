@@ -3,36 +3,6 @@ require 'passant/ui/common'
 # UI extensions to Passant base classes
 
 module Passant
-
-  class GameBoard
-    def ui=(ui)
-      @ui = ui
-      pieces.each{|p| p.initialize_ui(@ui)}
-    end
-    
-    def ui; @ui end
-
-    alias_method :add_piece_without_ui, :add_piece
-    def add_piece(piece)
-      add_piece_without_ui(piece)
-      piece.initialize_ui(@ui) if @ui
-    end
-
-    alias_method :move_abs_without_ui, :move_abs
-    def move_abs(from, to)
-      mv = move_abs_without_ui(from, to)
-      @ui.pending << lambda{ mv.draw }
-      mv
-    end
-    
-    alias_method :move_without_ui, :move
-    def move(move_str)
-      mv = move_without_ui(move_str)
-      @ui.pending << lambda{ mv.draw }
-      mv
-    end
-    
-  end
   
   class Move
     def draw
