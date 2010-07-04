@@ -26,7 +26,7 @@ module Passant
 
   class Piece
     
-    def initialize_ui(window)
+    def initialize_ui
       @bitmap = Passant::UI.bitmapify(
         "#{self.color}_#{self.class.to_s.split('::')[1].downcase}.png")      
     end

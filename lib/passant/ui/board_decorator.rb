@@ -13,7 +13,7 @@ module Passant::UI
     def_delegators :@panel, :refresh
     
     def create_ui(parent)
-      pieces.each{|p| p.initialize_ui(self)}
+      pieces.each{|p| p.initialize_ui}
       
       @white = Passant::UI.bitmapify('white_square.png')
       @black = Passant::UI.bitmapify('black_square.png')
@@ -30,7 +30,7 @@ module Passant::UI
     
     def add_piece(piece)
       super(piece)
-      piece.initialize_ui(self)
+      piece.initialize_ui
     end
 
     def move_abs(from, to)
