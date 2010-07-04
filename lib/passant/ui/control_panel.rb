@@ -22,7 +22,7 @@ module Passant::UI
       mv = parent.board.take_back
       if mv
         parent.set_status("Took back #{mv.to_pgn}.")
-        mv.piece.board.ui.refresh
+        mv.piece.board.refresh
       end
     end
 
@@ -33,7 +33,7 @@ module Passant::UI
       
       if mv
         parent.set_status(mv.to_pgn) 
-        mv.piece.board.ui.refresh
+        mv.piece.board.refresh
       end
     end
   end

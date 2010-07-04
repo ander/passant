@@ -1,4 +1,4 @@
-require 'passant/ui/board_panel'
+require 'passant/ui/board_decorator'
 require 'passant/ui/control_panel'
 require 'passant/ui/info_frame'
 require 'passant/ui/open_pgn_frame'
@@ -6,6 +6,8 @@ require 'passant/ui/open_pgn_frame'
 module Passant::UI
   
   class MainFrame < Wx::Frame
+    attr_accessor :board
+    
     def initialize
       super(nil, 
             :title => "Passant", 
@@ -15,7 +17,8 @@ module Passant::UI
                       Wx::CAPTION|Wx::CLOSE_BOX|Wx::CLIP_CHILDREN)
       
       sizer = Wx::BoxSizer.new(Wx::VERTICAL)
-      @board_panel = BoardPanel.new(self)
+      @board = Passant::GameBoard.new.extend(BoardDecorator)
+      @board.create_ui(self)
       control_panel = ControlPanel.new(self)
       self.status_bar = Wx::StatusBar.new(self)
 
@@ -23,12 +26,12 @@ module Passant::UI
                              :size => [480,20],
                              :range => 10)
       sub_sizer = Wx::BoxSizer.new(Wx::HORIZONTAL)
-      @value_text = Wx::StaticText.new(self, :label => board.value_str)
+      @value_text = Wx::StaticText.new(self, :label => @board.value_str)
       sub_sizer.add(control_panel)
       sub_sizer.add_spacer(20)
       sub_sizer.add(@value_text)
       
-      [@board_panel, @gauge, sub_sizer].each do |item| 
+      [@board.panel, @gauge, sub_sizer].each do |item| 
         sizer.add(item)
       end
       
@@ -67,10 +70,6 @@ module Passant::UI
       set_status("Welcome.")
     end
 
-    def board
-      @board_panel.board
-    end
-
     def set_status(str)
       self.status_bar.set_status_text(str)
       @value_text.set_label board.value_str
@@ -83,18 +82,18 @@ module Passant::UI
 
     def pulse
       @gauge.pulse
-      @board_panel.draw_pending
+      @board.draw_pending
       Wx::get_app.yield(true)
     end
 
     def ready
-      @board_panel.draw_pending
+      @board.draw_pending
       @gauge.set_value(0)
     end
 
     def reset_board
       board.reset
-      @board_panel.paint_board
+      @board.paint
       set_info(board.tag_pairs)
       set_status('Board reset.')
     end
@@ -117,7 +116,7 @@ module Passant::UI
     end
 
     def flip_board
-      @board_panel.flip_board
+      @board.flip
     end
 
     def show_info_frame

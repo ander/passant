@@ -1,42 +1,55 @@
-
 require 'passant/game_board'
 require 'passant/data/init'
 require 'passant/ui/extensions'
 require 'passant/ui/common'
-require 'passant/ui/board_ui_decorator'
 require 'passant/ui/highlighter'
+require 'forwardable'
 
 module Passant::UI
-  class BoardPanel < Wx::Panel
-    attr_reader :board, :pending, :highlighter
+  
+  module BoardDecorator
+    extend Forwardable
+    attr_reader :pending, :highlighter, :panel
+    def_delegators :@panel, :refresh
     
-    def initialize(parent)
-      super(parent, :size => [480,480])
-      evt_paint     :paint_board
-      evt_left_down :click_piece
-      evt_left_up   :release_piece
+    def create_ui(parent)
+      pieces.each{|p| p.initialize_ui(self)}
       
-      board = Passant::GameBoard.new
-      board.extend BoardUIDecorator
-      set_board board
       @white = Passant::UI.bitmapify('white_square.png')
       @black = Passant::UI.bitmapify('black_square.png')
       @flipped = false
       @pending = []
       @highlighter = Highlighter.new(self)
-      show
+      
+      @panel = Wx::Panel.new(parent, :size => [480,480])
+      @panel.evt_paint     { self.paint }
+      @panel.evt_left_down {|event| self.click_piece(event)   }
+      @panel.evt_left_up   {|event| self.release_piece(event) }
+      @panel.show
+    end
+    
+    def add_piece(piece)
+      super(piece)
+      piece.initialize_ui(self)
+    end
+
+    def move_abs(from, to)
+      mv = super(from, to)
+      pending << lambda{ mv.draw(@panel) }
+      mv
+    end
+    
+    def move(move_str)
+      mv = super(move_str)
+      pending << lambda{ mv.draw(@panel) }
+      mv
     end
     
     def flipped?; @flipped end
 
-    def flip_board
+    def flip
       @flipped = !@flipped
-      paint_board
-    end
-
-    def set_board(board)
-      @board = board
-      @board.ui = self
+      paint
     end
     
     def draw_square(pos, dc)
@@ -47,14 +60,14 @@ module Passant::UI
       dc.draw_bitmap(square, x*60, y*60, true)
     end
 
-    def paint_board
-      paint do |dc|
+    def paint
+      @panel.paint do |dc|
         8.times do |x|
           8.times do |y|
             draw_square([x,y],dc)
           end
         end
-        @board.pieces.each {|p| p.draw(dc) }
+        pieces.each {|p| p.draw(dc) }
         @highlighter.highlight(dc)
       end
     end
@@ -70,8 +83,6 @@ module Passant::UI
       y = flipped? ? pos[1] * 60 : 420 - (pos[1]*60)
       Wx::Point.new(x,y)
     end
-    
-    private
 
     def pos_for_point(point)
       x = flipped? ? 7 - (point.x / 60) : point.x / 60
@@ -90,19 +101,20 @@ module Passant::UI
       Wx::get_app.responsively do
         begin
           to = pos_for_point(mouse_event.get_position)
-          self.disable
-          mv = @board.move_abs(@from, to)
-          pending << lambda {parent.set_status(mv.to_pgn)}
+          @panel.disable
+          mv = move_abs(@from, to)
+          pending << lambda {@panel.parent.set_status(mv.to_pgn)}
           
         rescue Passant::MoveParser::ParseError, Passant::Board::Exception => e
-          pending << lambda {parent.set_status(e.message)}
+          pending << lambda {@panel.parent.set_status(e.message)}
         
         ensure  
           @from = nil
-          self.enable
+          @panel.enable
         end
       end
     end
     
   end
+  
 end
